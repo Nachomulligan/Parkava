@@ -18,16 +18,18 @@ public class Enemy : MonoBehaviour
     private int currentWaypointIndex = 0;
     private Transform currentWaypoint;
     private Transform nextWaypoint;
+    private Quaternion initialRotation;
 
     private void Start()
     {
+        initialRotation = transform.rotation;
+
         currentWaypoint = waypointPath.GetWayPoint(currentWaypointIndex);
         nextWaypoint = waypointPath.GetWayPoint(waypointPath.GetNextWaypointIndex(currentWaypointIndex));
     }
 
     private void Update()
     {
-
         MoveAlongPath();
 
         if (Vector3.Distance(transform.position, player.position) < attackRange)
@@ -47,7 +49,9 @@ public class Enemy : MonoBehaviour
 
     private void MoveAlongPath()
     {
+
         transform.position = Vector3.MoveTowards(transform.position, nextWaypoint.position, movementSpeed * Time.deltaTime);
+        transform.rotation = initialRotation;
 
         if (Vector3.Distance(transform.position, nextWaypoint.position) < 0.1f)
         {
