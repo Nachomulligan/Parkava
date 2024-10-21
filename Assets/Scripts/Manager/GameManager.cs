@@ -1,17 +1,12 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    public enum GameState
-    {
-        Gameplay,
-        Pause
-    }
-    private GameState currentState;
-
+    private IState currentState; // Estado actual
     private static GameManager _instance;
+
     public static GameManager Instance
     {
         get
@@ -31,7 +26,6 @@ public class GameManager : MonoBehaviour
         }
     }
 
-
     private void Awake()
     {
         if (_instance != null && _instance != this)
@@ -43,35 +37,43 @@ public class GameManager : MonoBehaviour
         _instance = this;
         DontDestroyOnLoad(this.gameObject);
 
-        currentState = GameState.Gameplay;
-    }
-    public void SetState(GameState newState)
-    {
-        currentState = newState;
-        HandleStateChange();
+        // Inicialmente en estado de Gameplay
+        ChangeState(new GameplayState());
     }
 
-    public GameState GetCurrentState()
+    private void Update()
+    {
+        // Ejecuta la lógica del estado actual en cada frame
+        currentState?.Execute();
+    }
+
+    // Método para cambiar de estado
+    public void ChangeState(IState newState)
+    {
+        if (currentState != null)
+        {
+            currentState.Exit();
+        }
+
+        currentState = newState;
+        currentState.Enter();
+    }
+
+    // Obtener el estado actual
+    public IState GetCurrentState()
     {
         return currentState;
     }
 
-    private void HandleStateChange()
+    // Método para ir a Gameplay
+    public void GoToGameplay()
     {
-        switch (currentState)
-        {
-            case GameState.Gameplay:
-                Time.timeScale = 1f;
-                Cursor.lockState = CursorLockMode.Locked;
-                Cursor.visible = false;
-                break;
-
-            case GameState.Pause:
-                Time.timeScale = 0f;
-                Cursor.lockState = CursorLockMode.None;
-                Cursor.visible = true;
-                break;
-        }
+        ChangeState(new GameplayState());
     }
 
+    // Método para ir a PauseMenu
+    public void GoToPauseMenu()
+    {
+        ChangeState(new PauseState());
+    }
 }

@@ -11,11 +11,11 @@ public class PauseMenu : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            if (GameManager.Instance.GetCurrentState() == GameState.Gameplay)
+            if (GameManager.Instance.GetCurrentState() is GameplayState)
             {
                 Pause();
             }
-            else
+            else if (GameManager.Instance.GetCurrentState() is PauseState)
             {
                 Resume();
             }
@@ -25,12 +25,12 @@ public class PauseMenu : MonoBehaviour
     public void Pause()
     {
         pauseMenuUI.SetActive(true);
-        GameManager.Instance.SetState(GameState.Pause);
+        GameManager.Instance.GoToPauseMenu();  // Cambio de estado a Pause
     }
 
     public void Resume()
     {
         pauseMenuUI.SetActive(false);
-        GameManager.Instance.SetState(GameState.Gameplay);
+        GameManager.Instance.GoToGameplay();  // Cambio de estado a Gameplay
     }
 }
