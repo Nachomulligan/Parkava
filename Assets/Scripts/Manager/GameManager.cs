@@ -37,17 +37,14 @@ public class GameManager : MonoBehaviour
         _instance = this;
         DontDestroyOnLoad(this.gameObject);
 
-        // Inicialmente en estado de Gameplay
         ChangeState(new GameplayState());
     }
 
     private void Update()
     {
-        // Ejecuta la lógica del estado actual en cada frame
         currentState?.Execute();
     }
 
-    // Método para cambiar de estado
     public void ChangeState(IState newState)
     {
         if (currentState != null)
@@ -59,21 +56,24 @@ public class GameManager : MonoBehaviour
         currentState.Enter();
     }
 
-    // Obtener el estado actual
     public IState GetCurrentState()
     {
         return currentState;
     }
 
-    // Método para ir a Gameplay
     public void GoToGameplay()
     {
         ChangeState(new GameplayState());
     }
 
-    // Método para ir a PauseMenu
+
     public void GoToPauseMenu()
     {
         ChangeState(new PauseState());
+    }
+
+    public void GoToConsoleMenu()
+    {
+        ChangeState(new ConsoleState());
     }
 }

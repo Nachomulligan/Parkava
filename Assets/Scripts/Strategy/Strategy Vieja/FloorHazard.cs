@@ -4,15 +4,14 @@ using UnityEngine;
 
 public class FloorHazard : MonoBehaviour
 {
-    [SerializeField] private float tickDamage;
+    [SerializeField] private int Damage;
 
     private void OnTriggerStay(Collider other)
     {
-        var damageable = other.GetComponent<IDamageable>();
-
-        if (damageable != null)
+        Character character = other.GetComponent<Character>();
+        if (character != null)
         {
-            damageable.TakeDamage(tickDamage * Time.fixedDeltaTime);
+            character.health.TakeDamage(Damage);
         }
     }
 }

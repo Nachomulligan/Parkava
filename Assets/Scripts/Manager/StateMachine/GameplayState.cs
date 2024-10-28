@@ -9,7 +9,6 @@ public class GameplayState : IState
 
     public GameplayState()
     {
-        // Definir los posibles estados a los que puede cambiar
         Outputs = new Dictionary<string, IState>();
     }
 
@@ -23,12 +22,10 @@ public class GameplayState : IState
 
     public void Execute()
     {
-        // Comportamiento durante el estado de Gameplay (ejecutado en cada frame)
     }
 
     public void Exit()
     {
-        // Cualquier limpieza o lógica al salir del estado
         Debug.Log("Exiting Gameplay State");
     }
 }

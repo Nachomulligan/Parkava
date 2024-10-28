@@ -4,43 +4,46 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
-    // Assignables
+    [Header("Assignables")]
     public Transform playerCam;
     public Transform orientation;
 
-    // Other
-    private Rigidbody rb;
 
-    // Rotation and look
+    [Header("Rotation and Look Settings")]
     private float xRotation;
     private float sensitivity = 50f;
     private float sensMultiplier = 1f;
+    private float desiredX;
 
-    // Movement
+    [Header("Movement Settings")]
     public float moveSpeed = 4500;
     public float maxSpeed = 20;
     public bool grounded;
     public LayerMask whatIsGround;
 
+    [Header("MoveSettings")]
     public float counterMovement = 0.175f;
     private float threshold = 0.01f;
     public float maxSlopeAngle = 35f;
 
-    // Crouch & Slide
+    [Header("Movement Multipliers")]
+    [SerializeField] public float airMultiplier = 0.5f;
+    [SerializeField] public float slideMultiplier = 0f;
+
+    [Header("Crouch & Slide Settings")]
     private Vector3 crouchScale = new Vector3(1, 0.5f, 1);
     private Vector3 playerScale;
     public float slideForce = 400;
     public float slideCounterMovement = 0.2f;
 
-    // Jumping
+    [Header("Jump Settings")]
     private bool readyToJump = true;
-    private float jumpCooldown = 0.25f;
-    public float jumpForce = 550f;
-
+    [SerializeField] private float jumpCooldown = 0.25f;
+    [SerializeField] public float jumpForce = 550f;
     // Coyote time
-    public float coyoteTime = 0.2f; // Personalizable desde el inspector
-    private float coyoteTimeCounter; // Contador de coyote time
-    [SerializeField] private int maxJumpCount = 2; // Número máximo de saltos permitidos
+    [SerializeField] public float coyoteTime = 0.2f;
+    private float coyoteTimeCounter;
+    [SerializeField] private int maxJumpCount = 2;
     private int currentJumpCount = 0;
 
     // Input
@@ -50,6 +53,9 @@ public class PlayerMovement : MonoBehaviour
     // Sliding
     private Vector3 normalVector = Vector3.up;
     private Vector3 wallNormalVector;
+
+
+    private Rigidbody rb;
 
     void Awake()
     {
@@ -78,7 +84,10 @@ public class PlayerMovement : MonoBehaviour
     {
         x = Input.GetAxisRaw("Horizontal");
         y = Input.GetAxisRaw("Vertical");
-        jumping = Input.GetButton("Jump");
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            jumping = true;
+        }
         crouching = Input.GetKey(KeyCode.LeftControl);
 
         // Crouching
@@ -88,6 +97,9 @@ public class PlayerMovement : MonoBehaviour
             StopCrouch();
     }
 
+    /// <summary>
+    /// Adjusts player scale for crouching and applies slide force if the player is moving while grounded.
+    /// </summary>
     private void StartCrouch()
     {
         transform.localScale = crouchScale;
@@ -101,86 +113,122 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Resets the player scale after crouching and repositions the player slightly upwards.
+    /// </summary>
     private void StopCrouch()
     {
         transform.localScale = playerScale;
         transform.position = new Vector3(transform.position.x, transform.position.y + 0.5f, transform.position.z);
     }
 
+    /// <summary>
+    /// Manages player movement by applying forces based on input, gravity, and surface angle.
+    /// Limits the speed and adjusts for air and slide conditions.
+    /// </summary>
     private void Movement()
     {
-        // Extra gravity
         rb.AddForce(Vector3.down * Time.deltaTime * 10);
-
-        // Find actual velocity relative to where player is looking
         Vector2 mag = FindVelRelativeToLook();
         float xMag = mag.x, yMag = mag.y;
-
-        // Counteract sliding and sloppy movement
         CounterMovement(x, y, mag);
 
-        // If holding jump && ready to jump, then jump
-        if (jumping) Jump();
+        if (jumping)
+        {
+            Jump();
+            jumping = false;
+        }
 
-        // Set max speed
         float maxSpeed = this.maxSpeed;
-
-        // If sliding down a ramp, add force down so player stays grounded and also builds speed
         if (crouching && grounded && readyToJump)
         {
             rb.AddForce(Vector3.down * Time.deltaTime * 3000);
             return;
         }
 
-        // If speed is larger than maxspeed, cancel out the input so you don't go over max speed
         if (x > 0 && xMag > maxSpeed) x = 0;
         if (x < 0 && xMag < -maxSpeed) x = 0;
         if (y > 0 && yMag > maxSpeed) y = 0;
         if (y < 0 && yMag < -maxSpeed) y = 0;
 
-        // Some multipliers
+        // multipliers
         float multiplier = 1f, multiplierV = 1f;
 
         // Movement in air
         if (!grounded)
         {
-            multiplier = 0.5f;
-            multiplierV = 0.5f;
+            multiplier = airMultiplier;
+            multiplierV = airMultiplier;
         }
 
         // Movement while sliding
-        if (grounded && crouching) multiplierV = 0f;
+        if (grounded && crouching) multiplierV = slideMultiplier;
 
         // Apply forces to move player
         rb.AddForce(orientation.transform.forward * y * moveSpeed * Time.deltaTime * multiplier * multiplierV);
         rb.AddForce(orientation.transform.right * x * moveSpeed * Time.deltaTime * multiplier);
     }
 
+    /// <summary>
+    /// Detects when the player collides with the ground, reinitializing coyote time and resetting the jump count.
+    /// </summary>
+    private void OnCollisionEnter(Collision other)
+    {
+        // Reinitialize coyote time
+        if (other.gameObject.layer == LayerMask.NameToLayer("Ground"))
+        {
+            grounded = true;
+            coyoteTimeCounter = coyoteTime;
+            currentJumpCount = 0;
+        }
+    }
+
+    /// <summary>
+    /// Detects when the player leaves contact with the ground, marking them as airborne.
+    /// </summary>
+    private void OnCollisionExit(Collision other)
+    {
+        if (other.gameObject.layer == LayerMask.NameToLayer("Ground"))
+        {
+            grounded = false;
+        }
+    }
+
+    private void LateUpdate()
+    {
+        if (!grounded)
+        {
+            coyoteTimeCounter -= Time.deltaTime;
+        }
+    }
+
+    /// <summary>
+    /// Manages jump mechanics, including ground jump and mid-air jump with coyote time and jump count.
+    /// </summary>
     private void Jump()
     {
         if (grounded && readyToJump)
         {
             readyToJump = false;
-            coyoteTimeCounter = coyoteTime; // Usar el valor del inspector para coyote time
+            currentJumpCount ++; 
 
-            // Add jump forces
             rb.AddForce(Vector2.up * jumpForce * 1.5f);
             rb.AddForce(normalVector * jumpForce * 0.5f);
 
-            // If jumping while falling, reset y velocity.
+            // Reset Y vel if we are falling
             Vector3 vel = rb.velocity;
             if (rb.velocity.y < 0.5f)
                 rb.velocity = new Vector3(vel.x, 0, vel.z);
             else if (rb.velocity.y > 0)
                 rb.velocity = new Vector3(vel.x, vel.y / 2, vel.z);
 
+
             Invoke(nameof(ResetJump), jumpCooldown);
         }
-        else if (currentJumpCount < maxJumpCount && coyoteTimeCounter > 0) // Doble salto
+        else if (!grounded && currentJumpCount < maxJumpCount)
         {
             currentJumpCount++;
-            rb.AddForce(Vector2.up * jumpForce * 1.5f);
-            coyoteTimeCounter = 0; // Reinicia el contador de coyote time al saltar nuevamente
+            rb.AddForce(Vector2.up * jumpForce * 1.2f);
         }
     }
 
@@ -189,11 +237,13 @@ public class PlayerMovement : MonoBehaviour
         readyToJump = true;
         if (grounded)
         {
-            currentJumpCount = 0; // Reiniciar el contador de saltos al estar en el suelo
+            currentJumpCount = 0;
         }
     }
 
-    private float desiredX;
+    /// <summary>
+    /// Rotates the player camera and orientation based on mouse input, clamping the rotation to avoid over-rotation.
+    /// </summary>
     private void Look()
     {
         float mouseX = Input.GetAxis("Mouse X") * sensitivity * Time.fixedDeltaTime * sensMultiplier;
@@ -203,15 +253,18 @@ public class PlayerMovement : MonoBehaviour
         Vector3 rot = playerCam.transform.localRotation.eulerAngles;
         desiredX = rot.y + mouseX;
 
-        // Rotate, and also make sure we don't over- or under-rotate.
         xRotation -= mouseY;
         xRotation = Mathf.Clamp(xRotation, -90f, 90f);
 
-        // Perform the rotations
+        // make the rotations
         playerCam.transform.localRotation = Quaternion.Euler(xRotation, desiredX, 0);
         orientation.transform.localRotation = Quaternion.Euler(0, desiredX, 0);
     }
 
+
+    /// <summary>
+    /// Counters player movement to reduce sliding or excessive speed in unintended directions.
+    /// </summary>
     private void CounterMovement(float x, float y, Vector2 mag)
     {
         if (!grounded || jumping) return;
@@ -233,7 +286,7 @@ public class PlayerMovement : MonoBehaviour
             rb.AddForce(moveSpeed * orientation.transform.forward * Time.deltaTime * -mag.y * counterMovement);
         }
 
-        // Limit diagonal running. This will also cause a full stop if sliding fast and un-crouching, so not optimal.
+        // Limit diagonal running
         if (Mathf.Sqrt((Mathf.Pow(rb.velocity.x, 2) + Mathf.Pow(rb.velocity.z, 2))) > maxSpeed)
         {
             float fallspeed = rb.velocity.y;
@@ -246,7 +299,6 @@ public class PlayerMovement : MonoBehaviour
     /// Find the velocity relative to where the player is looking
     /// Useful for vectors calculations regarding movement and limiting movement
     /// </summary>
-    /// <returns></returns>
     public Vector2 FindVelRelativeToLook()
     {
         float lookAngle = orientation.transform.eulerAngles.y;
@@ -261,32 +313,5 @@ public class PlayerMovement : MonoBehaviour
 
         return new Vector2(xMag, yMag);
     }
-
-    private void OnCollisionEnter(Collision other)
-    {
-        // Reinitialize coyote time
-        if (other.gameObject.layer == LayerMask.NameToLayer("Ground"))
-        {
-            grounded = true;
-            coyoteTimeCounter = coyoteTime; // Reiniciar el coyote time al tocar el suelo
-            currentJumpCount = 0; // Reiniciar contador de saltos al aterrizar
-        }
-    }
-
-    private void OnCollisionExit(Collision other)
-    {
-        if (other.gameObject.layer == LayerMask.NameToLayer("Ground"))
-        {
-            grounded = false;
-        }
-    }
-
-    private void LateUpdate()
-    {
-        // Update coyote time counter
-        if (!grounded)
-        {
-            coyoteTimeCounter -= Time.deltaTime; // Contador decrece cuando no está en el suelo
-        }
-    }
+    
 }

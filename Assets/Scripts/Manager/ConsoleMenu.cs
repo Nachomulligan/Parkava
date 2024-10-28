@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using static GameManager;
 
-public class PauseMenu : MonoBehaviour
+public class ConsoleMenu : MonoBehaviour
 {
-    [SerializeField] public GameObject pauseMenuUI;
+    [SerializeField] private GameObject consoleMenuUI;
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape))
+        if (Input.GetKeyDown(KeyCode.F1))
         {
             if (GameManager.Instance.GetCurrentState() is GameplayState)
             {
@@ -24,13 +24,13 @@ public class PauseMenu : MonoBehaviour
 
     public void Pause()
     {
-        pauseMenuUI.SetActive(true);
-        GameManager.Instance.GoToPauseMenu();  
+        consoleMenuUI.SetActive(true);
+        GameManager.Instance.GoToPauseMenu(); 
     }
 
     public void Resume()
     {
-        pauseMenuUI.SetActive(false);
+        consoleMenuUI.SetActive(false);
         GameManager.Instance.GoToGameplay(); 
     }
 }
