@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class ConsoleState : IState
 {
-    public string Id { get; private set; } = "Pause";
+    public string Id { get; private set; } = "Console";
     public Dictionary<string, IState> Outputs { get; private set; }
 
     public ConsoleState()
@@ -17,12 +17,12 @@ public class ConsoleState : IState
         Time.timeScale = 0f;
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
-        Debug.Log("Entered Pause State");
+        Debug.Log("Entered Console State");
     }
 
     public void Execute()
     {
-        // Comportamiento durante el estado de Pausa (ejecutado en cada frame)
+        
     }
 
     public void Exit()
