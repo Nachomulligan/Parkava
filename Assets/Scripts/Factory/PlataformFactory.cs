@@ -2,15 +2,22 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlataformFactory : MonoBehaviour
+public class PlatformFactory : IPlatformFactory
 {
-    void Start()
+    private ObjectPool platformPool;
+
+    public PlatformFactory(GameObject prefab, int initialSize, Transform parent = null)
     {
-        
+        platformPool = new ObjectPool(prefab, initialSize, parent);
     }
 
-    void Update()
+    public GameObject CreatePlatform(Vector3 position)
     {
-        
+        return platformPool.GetObject(position);
+    }
+
+    public void ReturnPlatform(GameObject platform)
+    {
+        platformPool.ReturnObject(platform);
     }
 }
