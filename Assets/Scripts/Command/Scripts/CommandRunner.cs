@@ -7,12 +7,15 @@ using UnityEngine.UI;
 [RequireComponent(typeof(Button))]
 public class CommandRunner : MonoBehaviour
 {
-    [SerializeField] private Command command;
+    [SerializeField] private string commandAlias;
     [SerializeField] private string arguments;
     private Button _button;
+    private CommandConsoleManager _commandConsoleManager;
+
     private void Awake()
     {
         _button = GetComponent<Button>();
+        _commandConsoleManager = FindObjectOfType<CommandConsoleManager>();
     }
 
     private void OnEnable()
@@ -27,12 +30,14 @@ public class CommandRunner : MonoBehaviour
 
     private void HandleClick()
     {
-        if(command != null)
+        if (_commandConsoleManager != null)
         {
             string[] args = arguments.Split(' ');
-            command.Execute(args);
+            _commandConsoleManager.ExecuteCommand(commandAlias, args);
         }
         else
-            Debug.LogError($"{name}: {nameof(command)} is null!", gameObject);
+        {
+            Debug.LogError($"{nameof(CommandConsoleManager)} not found in the scene!");
+        }
     }
 }
