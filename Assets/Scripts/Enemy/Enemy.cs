@@ -62,6 +62,7 @@ public class Enemy : MonoBehaviour
 
     private IEnumerator Shoot()
     {
+        //!destroyCancelationToken.IsCancellationRequested)
         while (true)
         {
             weaponStrategy.Shoot(shootPoint, bulletPrefab, player);

@@ -54,7 +54,18 @@ public class Character : MonoBehaviour
     {
         Debug.Log("Character has died.");
         gameObject.SetActive(false);
+
+        var checkpointManager = FindObjectOfType<CheckpointManager>();
+        if (checkpointManager != null)
+        {
+            checkpointManager.Respawn(gameObject);
+        }
+        else
+        {
+            Debug.LogError("CheckpointManager not found in the scene.");
+        }
     }
+
 
     private void OnDrawGizmos()
     {
