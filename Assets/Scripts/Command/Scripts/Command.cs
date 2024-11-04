@@ -7,7 +7,5 @@ public abstract class Command : ScriptableObject, ICommand
 
     public string Name => name;
 
-    public abstract void Execute();
-
-    public abstract void Execute(string[] args);
+    public abstract void Execute(params string[] args);
 }

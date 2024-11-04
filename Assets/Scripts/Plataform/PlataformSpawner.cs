@@ -20,7 +20,6 @@ public class PlatformSpawner : MonoBehaviour
 
     private void SpawnPlatform()
     {
-        // Pide una plataforma al pool usando la factory
         GameObject platform = platformFactory.CreatePlatform(spawnPosition);
 
         var listPlatform = platform.GetComponent<LinePlataform>();

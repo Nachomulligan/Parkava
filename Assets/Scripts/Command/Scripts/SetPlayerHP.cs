@@ -3,10 +3,6 @@
 [CreateAssetMenu(menuName = "Commands/Set Player HP")]
 public class SetPlayerHP : Command
 {
-    public override void Execute()
-    {
-        Debug.LogError("This command requires, at least, 1 argument");
-    }
 
     public override void Execute(string[] args)
     {

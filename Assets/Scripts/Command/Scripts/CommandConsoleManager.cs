@@ -5,33 +5,44 @@ using UnityEngine;
 public class CommandConsoleManager : MonoBehaviour
 {
     [SerializeField] private List<Command> commands;
-    private Dictionary<string, Command> commandDictionary;
+    private Dictionary<string, ICommand> commandDictionary = new();
 
     private void Awake()
     {
-        commandDictionary = new Dictionary<string, Command>();
-
         foreach (var command in commands)
         {
-           
-            if (!commandDictionary.ContainsKey(command.Name))
-            {
-                commandDictionary.Add(command.Name, command);
-            }
+            AddCommand(command);
+        }
+    }
 
-            foreach (var alias in command.Aliases)
+    public void AddCommand(ICommand command)
+    {
+        if (!commandDictionary.TryAdd(command.Name, command))
+        {
+            //log che mira que tenes duplicados
+        }
+
+        foreach (var alias in command.Aliases)
+        {
+            if (!commandDictionary.TryAdd(alias, command))
             {
-                if (!commandDictionary.ContainsKey(alias))
-                {
-                    commandDictionary.Add(alias, command);
-                }
+                //log che mira que tenes duplicados
             }
         }
     }
 
-    public void ExecuteCommand(string alias, string[] args)
+    public void RemoveCommand(ICommand command)
     {
-        if (commandDictionary.TryGetValue(alias, out Command command))
+        commandDictionary.Remove(command.Name);
+        foreach (var alias in command.Aliases)
+        {
+            commandDictionary.Remove(alias);
+        }
+    }
+
+    public void ExecuteCommand(string alias, params string[] args)
+    {
+        if (commandDictionary.TryGetValue(alias, out ICommand command))
         {
             command.Execute(args);
         }

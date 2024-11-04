@@ -20,6 +20,20 @@ public class Enemy : MonoBehaviour
     private Transform nextWaypoint;
     private Quaternion initialRotation;
 
+    InjectableCommand _killCommand;
+
+    private void OnEnable()
+    {
+        CommandConsoleManager console = null; //Get from service locator
+        _killCommand = new InjectableCommand($"Kill {name}", Die, DieWithArguments);
+        console.AddCommand(_killCommand);
+    }
+    private void OnDisable()
+    {
+        CommandConsoleManager console = null; //Get from service locator
+        console.RemoveCommand(_killCommand);
+    }
+
     private void Start()
     {
         initialRotation = transform.rotation;
@@ -62,8 +76,7 @@ public class Enemy : MonoBehaviour
 
     private IEnumerator Shoot()
     {
-        //!destroyCancelationToken.IsCancellationRequested)
-        while (true)
+        while (!destroyCancellationToken.IsCancellationRequested)
         {
             weaponStrategy.Shoot(shootPoint, bulletPrefab, player);
             yield return new WaitForSeconds(shootPeriod);
@@ -74,5 +87,15 @@ public class Enemy : MonoBehaviour
     {
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, attackRange);
+    }
+
+
+    private void DieWithArguments(string[] obj)
+    {
+        throw new NotImplementedException();
+    }
+    public void Die()
+    {
+
     }
 }

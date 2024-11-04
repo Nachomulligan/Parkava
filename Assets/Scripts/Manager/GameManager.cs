@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    private IState currentState; // Estado actual
+    private IState currentState; 
     private static GameManager _instance;
 
     public static GameManager Instance
