@@ -241,6 +241,11 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
+    public void SetMaxJumpCount(int value)
+    {
+        maxJumpCount = value;
+    }
+
     /// <summary>
     /// Rotates the player camera and orientation based on mouse input, clamping the rotation to avoid over-rotation.
     /// </summary>

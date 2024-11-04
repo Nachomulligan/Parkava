@@ -22,7 +22,7 @@ public class PauseState : IState
 
     public void Execute()
     {
-        // Comportamiento durante el estado de Pausa (ejecutado en cada frame)
+
     }
 
     public void Exit()
