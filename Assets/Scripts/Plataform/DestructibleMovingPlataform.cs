@@ -2,9 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DestructiblePlatform : MonoBehaviour
+public class DestructibleMovingPlatform : Platform
 {
-    [SerializeField] private float disableDelay = 2f;
+    [SerializeField] private float disableDelay = 0.3f;
 
     private void OnCollisionEnter(Collision collision)
     {
@@ -15,5 +15,10 @@ public class DestructiblePlatform : MonoBehaviour
     {
         yield return new WaitForSeconds(disableDelay);
         gameObject.SetActive(false);
+    }
+
+    private void Update()
+    {
+        MovePlatform();
     }
 }

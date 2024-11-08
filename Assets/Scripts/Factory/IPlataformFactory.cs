@@ -4,6 +4,6 @@ using UnityEngine;
 
 public interface IPlatformFactory
 {
-    GameObject CreatePlatform(Vector3 position);
-    void ReturnPlatform(GameObject platform); 
+    GameObject CreatePlatform(Vector3 position, string platformType);
+    void ReturnPlatform(GameObject platform);
 }

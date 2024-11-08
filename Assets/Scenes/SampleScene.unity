@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028352, g: 0.22571376, b: 0.3069224, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -5403,7 +5403,7 @@ GameObject:
   - component: {fileID: 1644750274}
   - component: {fileID: 1644750273}
   - component: {fileID: 1644750272}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Plane (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5594,7 +5594,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 44a2627dc86632e4ba0ac201a2eee43f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  platformPrefab: {fileID: 830455287826051287, guid: b470088b1a812f141a0d3955d7d7aa22,
+  linePlatformPrefab: {fileID: 1285625994124038623, guid: 7ac82d6585f883744b2f61927684309a,
+    type: 3}
+  destructiblePlatformPrefab: {fileID: 5915358656310845447, guid: 4ac82805d40a0804b953b8013697289e,
     type: 3}
   spawnPosition: {x: -33.52, y: 39.7, z: 1170.6}
   spawnInterval: 3
@@ -5609,7 +5611,7 @@ Transform:
   m_GameObject: {fileID: 1661114674}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -33.52, y: 39.7, z: 1170.6}
+  m_LocalPosition: {x: -33.52, y: 20.6, z: -9}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -7264,7 +7266,7 @@ GameObject:
   - component: {fileID: 1997983323}
   - component: {fileID: 1997983322}
   - component: {fileID: 1997983321}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Plane (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}

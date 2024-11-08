@@ -4,20 +4,42 @@ using UnityEngine;
 
 public class PlatformFactory : IPlatformFactory
 {
-    private ObjectPool platformPool;
+    private Dictionary<string, ObjectPool> platformPools;
 
-    public PlatformFactory(GameObject prefab, int initialSize, Transform parent = null)
+    /// <summary>
+    /// Initializes platform pools with specified prefabs and size.
+    /// </summary>
+    public PlatformFactory(Dictionary<string, GameObject> prefabs, int initialSize, Transform parent = null)
     {
-        platformPool = new ObjectPool(prefab, initialSize, parent);
+        platformPools = new Dictionary<string, ObjectPool>();
+
+        foreach (var kvp in prefabs)
+        {
+            platformPools[kvp.Key] = new ObjectPool(kvp.Value, initialSize, parent);
+        }
     }
 
-    public GameObject CreatePlatform(Vector3 position)
+    public GameObject CreatePlatform(Vector3 position, string platformType)
     {
-        return platformPool.GetObject(position);
+        if (platformPools.ContainsKey(platformType))
+        {
+            return platformPools[platformType].GetObject(position);
+        }
+
+        Debug.LogError($"Platform type {platformType} not found in factory.");
+        return null;
     }
 
     public void ReturnPlatform(GameObject platform)
     {
-        platformPool.ReturnObject(platform);
+        string platformType = platform.GetComponent<Platform>().GetType().Name;
+        if (platformPools.ContainsKey(platformType))
+        {
+            platformPools[platformType].ReturnObject(platform);
+        }
+        else
+        {
+            Debug.LogError($"Platform type {platformType} not found in factory.");
+        }
     }
 }
