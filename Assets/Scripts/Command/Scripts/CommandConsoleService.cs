@@ -2,13 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CommandConsoleManager : MonoBehaviour
+public class CommandConsoleService : MonoBehaviour
 {
     [SerializeField] private List<Command> commands;
     private Dictionary<string, ICommand> commandDictionary = new();
 
     private void Awake()
     {
+        ServiceLocator.Instance.SetService(nameof(CommandConsoleService), this);
+
         foreach (var command in commands)
         {
             AddCommand(command);
@@ -19,14 +21,14 @@ public class CommandConsoleManager : MonoBehaviour
     {
         if (!commandDictionary.TryAdd(command.Name, command))
         {
-            //log che mira que tenes duplicados
+            Debug.LogWarning($"Command '{command.Name}' already exists in the dictionary.");
         }
 
         foreach (var alias in command.Aliases)
         {
             if (!commandDictionary.TryAdd(alias, command))
             {
-                //log che mira que tenes duplicados
+                Debug.LogWarning($"Alias '{alias}' for command '{command.Name}' already exists.");
             }
         }
     }
@@ -52,4 +54,3 @@ public class CommandConsoleManager : MonoBehaviour
         }
     }
 }
-

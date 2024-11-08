@@ -24,13 +24,13 @@ public class Enemy : MonoBehaviour
 
     private void OnEnable()
     {
-        CommandConsoleManager console = null; //Get from service locator
+        CommandConsoleService console = null; //Get from service locator
         _killCommand = new InjectableCommand($"Kill {name}", Die, DieWithArguments);
         console.AddCommand(_killCommand);
     }
     private void OnDisable()
     {
-        CommandConsoleManager console = null; //Get from service locator
+        CommandConsoleService console = null; //Get from service locator
         console.RemoveCommand(_killCommand);
     }
 
