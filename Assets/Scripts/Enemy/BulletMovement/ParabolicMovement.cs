@@ -11,39 +11,44 @@ public class ParabolicMovement : BulletMovementStrategy
     private float journeyLength;
     private float startTime;
 
+    /// <summary>
+    /// Sets the start, mid, and end points of a parabolic trajectory
+    /// Initializes the journey length and start time
+    /// </summary>
     public override void Initialize(Vector3 targetPosition, Vector3 startPosition)
     {
         startPoint = startPosition;
         endPoint = targetPosition;
 
-        // Calculamos el punto medio con una elevación
         midPoint = (startPoint + endPoint) / 2;
         midPoint.y += height;
 
-        // Almacenamos la longitud del recorrido y el tiempo inicial
         journeyLength = Vector3.Distance(startPoint, endPoint);
         startTime = Time.time;
     }
 
+    /// <summary>
+    /// Moves the bullet along a parabolic trajectory toward the target
+    /// Destroys the bullet when it reaches the target
+    /// </summary>
     public override void Move(Transform bulletTransform, Vector3 targetPosition)
     {
-        // Calculamos el tiempo pasado
         float distCovered = (Time.time - startTime) * speed;
         float fractionOfJourney = distCovered / journeyLength;
 
-        // Movimiento parabólico
         bulletTransform.position = ParabolicTrajectory(startPoint, midPoint, endPoint, fractionOfJourney);
 
-        // Opcional: Si quieres que la bala se destruya al llegar al objetivo
         if (fractionOfJourney >= 1)
         {
             Destroy(bulletTransform.gameObject);
         }
     }
-
+    /// <summary>
+    /// Calculates a parabolic point on the trajectory using quadratic interpolation.
+    /// </summary>
+    /// <returns>The interpolated position along the parabola.</returns>
     private Vector3 ParabolicTrajectory(Vector3 start, Vector3 middle, Vector3 end, float t)
     {
-        // Usamos interpolación cuadrática para la parábola
         Vector3 m1 = Vector3.Lerp(start, middle, t);
         Vector3 m2 = Vector3.Lerp(middle, end, t);
         return Vector3.Lerp(m1, m2, t);
