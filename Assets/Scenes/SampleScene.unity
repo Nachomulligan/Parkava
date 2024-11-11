@@ -5643,12 +5643,12 @@ MonoBehaviour:
   destructiblePlatformPrefab: {fileID: 5915358656310845447, guid: 4ac82805d40a0804b953b8013697289e,
     type: 3}
   spawnPosition: {x: -33.52, y: 39.7, z: 1170.6}
-  spawnInterval: 3
-  speed: 10
-  platformLifetime: 7
-  minScale: 0.5
-  maxScale: 1.5
-  scaleStep: 0.1
+  spawnInterval: 0.91
+  speed: 11.66
+  platformLifetime: 6.76
+  minScale: 0.2
+  maxScale: 1000
+  scaleStep: 20
 --- !u!4 &1661114676
 Transform:
   m_ObjectHideFlags: 0

@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    private IState currentState; 
     private static GameManager _instance;
+    private StateMachine _stateMachine;
 
     public static GameManager Instance
     {
@@ -36,29 +36,24 @@ public class GameManager : MonoBehaviour
 
         _instance = this;
         DontDestroyOnLoad(this.gameObject);
-
-        ChangeState(new GameplayState());
+        
+        _stateMachine = new StateMachine();
+        GoToGameplay();
     }
 
     private void Update()
     {
-        currentState?.Execute();
+        _stateMachine.Update();
     }
 
     public void ChangeState(IState newState)
     {
-        if (currentState != null)
-        {
-            currentState.Exit();
-        }
-
-        currentState = newState;
-        currentState.Enter();
+        _stateMachine.ChangeState(newState);
     }
 
     public IState GetCurrentState()
     {
-        return currentState;
+        return _stateMachine.GetCurrentState();
     }
 
     public void GoToGameplay()
