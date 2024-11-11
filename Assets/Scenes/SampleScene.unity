@@ -5646,6 +5646,9 @@ MonoBehaviour:
   spawnInterval: 3
   speed: 10
   platformLifetime: 7
+  minScale: 0.5
+  maxScale: 1.5
+  scaleStep: 0.1
 --- !u!4 &1661114676
 Transform:
   m_ObjectHideFlags: 0

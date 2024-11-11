@@ -4,42 +4,52 @@ using UnityEngine;
 
 public class PlatformFactory : IPlatformFactory
 {
-    private Dictionary<string, ObjectPool> platformPools;
+    private Dictionary<string, GameObject> prefabs;
+    private float currentScale;
+    private bool scalingUp = true;
 
-    /// <summary>
-    /// Initializes platform pools with specified prefabs and size.
-    /// </summary>
-    public PlatformFactory(Dictionary<string, GameObject> prefabs, int initialSize, Transform parent = null)
+    private float minScale;
+    private float maxScale;
+    private float scaleStep;
+
+    public PlatformFactory(Dictionary<string, GameObject> prefabs, float minScale, float maxScale, float scaleStep)
     {
-        platformPools = new Dictionary<string, ObjectPool>();
-
-        foreach (var kvp in prefabs)
-        {
-            platformPools[kvp.Key] = new ObjectPool(kvp.Value, initialSize, parent);
-        }
+        this.prefabs = prefabs;
+        this.minScale = minScale;
+        this.maxScale = maxScale;
+        this.scaleStep = scaleStep;
+        currentScale = minScale;
     }
 
     public GameObject CreatePlatform(Vector3 position, string platformType)
     {
-        if (platformPools.ContainsKey(platformType))
+        if (!prefabs.ContainsKey(platformType))
         {
-            return platformPools[platformType].GetObject(position);
+            Debug.LogError($"Platform type {platformType} not found in factory.");
+            return null;
         }
 
-        Debug.LogError($"Platform type {platformType} not found in factory.");
-        return null;
+        GameObject platformObject = GameObject.Instantiate(prefabs[platformType], position, Quaternion.identity);
+        UpdatePlatformScale(platformObject);
+
+        return platformObject;
     }
 
-    public void ReturnPlatform(GameObject platform)
+    private void UpdatePlatformScale(GameObject platformObject)
     {
-        string platformType = platform.GetComponent<Platform>().GetType().Name;
-        if (platformPools.ContainsKey(platformType))
+        platformObject.transform.localScale = Vector3.one * currentScale;
+
+        if (scalingUp)
         {
-            platformPools[platformType].ReturnObject(platform);
+            currentScale += scaleStep;
+            if (currentScale >= maxScale)
+                scalingUp = false;
         }
         else
         {
-            Debug.LogError($"Platform type {platformType} not found in factory.");
+            currentScale -= scaleStep;
+            if (currentScale <= minScale)
+                scalingUp = true;
         }
     }
 }

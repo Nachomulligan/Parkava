@@ -5,5 +5,4 @@ using UnityEngine;
 public interface IPlatformFactory
 {
     GameObject CreatePlatform(Vector3 position, string platformType);
-    void ReturnPlatform(GameObject platform);
 }

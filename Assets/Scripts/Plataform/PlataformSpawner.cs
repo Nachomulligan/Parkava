@@ -11,7 +11,13 @@ public class PlatformSpawner : MonoBehaviour
     public float speed = 2f;
     public float platformLifetime = 5f;
 
+    [Header("Platform Scale Settings")]
+    public float minScale = 0.5f;
+    public float maxScale = 1.5f;
+    public float scaleStep = 0.1f;
+
     private IPlatformFactory platformFactory;
+    private PlatformPoolManager platformPoolManager;
     private string[] platformTypes = { "LinePlatform", "DestructibleMovingPlatform" };
     private int currentPlatformIndex = 0;
 
@@ -23,7 +29,9 @@ public class PlatformSpawner : MonoBehaviour
             { "DestructibleMovingPlatform", destructiblePlatformPrefab }
         };
 
-        platformFactory = new PlatformFactory(platformPrefabs, 10, transform);
+        platformFactory = new PlatformFactory(platformPrefabs, minScale, maxScale, scaleStep);
+        platformPoolManager = new PlatformPoolManager(platformPrefabs, 10, transform);
+
         InvokeRepeating(nameof(SpawnPlatform), 0f, spawnInterval);
     }
 
@@ -32,7 +40,12 @@ public class PlatformSpawner : MonoBehaviour
         string platformType = platformTypes[currentPlatformIndex];
         currentPlatformIndex = (currentPlatformIndex + 1) % platformTypes.Length;
 
-        GameObject platformObject = platformFactory.CreatePlatform(spawnPosition, platformType);
+        GameObject platformObject = platformPoolManager.GetPlatform(platformType, spawnPosition);
+
+        if (platformObject == null)
+        {
+            platformObject = platformFactory.CreatePlatform(spawnPosition, platformType);
+        }
 
         if (platformObject != null)
         {
@@ -45,6 +58,6 @@ public class PlatformSpawner : MonoBehaviour
     private IEnumerator DeactivateAfterTime(GameObject platform, float time)
     {
         yield return new WaitForSeconds(time);
-        platformFactory.ReturnPlatform(platform);
+        platformPoolManager.ReturnPlatform(platform);
     }
 }
