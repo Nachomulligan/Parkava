@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+//TODO: Rename into PlatformManager
+//TODO: Have the Factory reference be handled inside this class
 public class PlatformPoolManager
 {
     private Dictionary<string, ObjectPool> platformPools;

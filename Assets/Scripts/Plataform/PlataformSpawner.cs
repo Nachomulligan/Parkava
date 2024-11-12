@@ -42,6 +42,7 @@ public class PlatformSpawner : MonoBehaviour
 
         GameObject platformObject = platformPoolManager.GetPlatform(platformType, spawnPosition);
 
+        //Move this block of code to the PlatformManager
         if (platformObject == null)
         {
             platformObject = platformFactory.CreatePlatform(spawnPosition, platformType);
