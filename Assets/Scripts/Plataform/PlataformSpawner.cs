@@ -16,21 +16,19 @@ public class PlatformSpawner : MonoBehaviour
     public float maxScale = 1.5f;
     public float scaleStep = 0.1f;
 
-    private IPlatformFactory platformFactory;
-    private PlatformPoolManager platformPoolManager;
+    private IPlatformService platformService;
     private string[] platformTypes = { "LinePlatform", "DestructibleMovingPlatform" };
     private int currentPlatformIndex = 0;
 
     private void Start()
     {
-        var platformPrefabs = new Dictionary<string, GameObject>
-        {
-            { "LinePlatform", linePlatformPrefab },
-            { "DestructibleMovingPlatform", destructiblePlatformPrefab }
-        };
+        platformService = ServiceLocator.Instance.GetService(nameof(IPlatformService)) as IPlatformService;
 
-        platformFactory = new PlatformFactory(platformPrefabs, minScale, maxScale, scaleStep);
-        platformPoolManager = new PlatformPoolManager(platformPrefabs, 10, transform);
+        if (platformService == null)
+        {
+            Debug.LogError("PlatformService not found in ServiceLocator!");
+            return;
+        }
 
         InvokeRepeating(nameof(SpawnPlatform), 0f, spawnInterval);
     }
@@ -40,13 +38,7 @@ public class PlatformSpawner : MonoBehaviour
         string platformType = platformTypes[currentPlatformIndex];
         currentPlatformIndex = (currentPlatformIndex + 1) % platformTypes.Length;
 
-        GameObject platformObject = platformPoolManager.GetPlatform(platformType, spawnPosition);
-
-        //Move this block of code to the PlatformManager
-        if (platformObject == null)
-        {
-            platformObject = platformFactory.CreatePlatform(spawnPosition, platformType);
-        }
+        GameObject platformObject = platformService.GetPlatform(spawnPosition, platformType);
 
         if (platformObject != null)
         {
@@ -59,6 +51,6 @@ public class PlatformSpawner : MonoBehaviour
     private IEnumerator DeactivateAfterTime(GameObject platform, float time)
     {
         yield return new WaitForSeconds(time);
-        platformPoolManager.ReturnPlatform(platform);
+        platformService.ReturnPlatform(platform);
     }
 }
