@@ -11,7 +11,7 @@ public class PlatformService : MonoBehaviour, IPlatformService
     {
         ServiceLocator.Instance.SetService(nameof(IPlatformService), this);
     }
-
+    //correr initialize
     public void Initialize(Dictionary<string, GameObject> prefabs, float minScale, float maxScale, float scaleStep, int initialPoolSize)
     {
         platformFactory = new PlatformFactory(prefabs, minScale, maxScale, scaleStep);
