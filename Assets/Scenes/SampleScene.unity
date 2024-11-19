@@ -5274,9 +5274,10 @@ MonoBehaviour:
   speed: 11.66
   platformLifetime: 6.76
   minScale: 0.8
-  maxScale: 2
-  scaleStep: 0.2
-  initialPoolSize: 3
+  maxScale: 1.5
+  scaleStep: 0.1
+  initialPoolSize: 10
+  isLeftDirection: 0
 --- !u!4 &1661114676
 Transform:
   m_ObjectHideFlags: 0

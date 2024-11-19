@@ -17,6 +17,9 @@ public class PlatformSpawner : MonoBehaviour
     public float scaleStep = 0.1f;
     public int initialPoolSize = 10;
 
+    [Header("Platform Direction")]
+    public bool isLeftDirection = false;
+
     private IPlatformService platformService;
     private string[] platformTypes = { "LinePlatform", "DestructibleMovingPlatform" };
     private int currentPlatformIndex = 0;
@@ -31,7 +34,6 @@ public class PlatformSpawner : MonoBehaviour
             return;
         }
 
-        // Inicializar PlatformService con los datos del spawner
         var prefabs = new Dictionary<string, GameObject>
         {
             { "LinePlatform", linePlatformPrefab },
@@ -52,8 +54,10 @@ public class PlatformSpawner : MonoBehaviour
 
         if (platformObject != null)
         {
+            Vector3 direction = isLeftDirection ? Vector3.left : Vector3.right;
             Platform platformComponent = platformObject.GetComponent<Platform>();
-            platformComponent.Initialize(speed);
+            platformComponent.Initialize(speed, direction);
+
             StartCoroutine(DeactivateAfterTime(platformObject, platformLifetime));
         }
     }

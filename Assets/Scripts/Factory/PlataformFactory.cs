@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -11,7 +12,6 @@ public class PlatformFactory : IPlatformFactory
     private float minScale;
     private float maxScale;
     private float scaleStep;
-
     public PlatformFactory(Dictionary<string, GameObject> prefabs, float minScale, float maxScale, float scaleStep)
     {
         this.prefabs = prefabs;
@@ -30,7 +30,6 @@ public class PlatformFactory : IPlatformFactory
         }
 
         GameObject platformObject = GameObject.Instantiate(prefabs[platformType], position, Quaternion.identity);
-        UpdatePlatformScale(platformObject);
         return platformObject;
     }
 

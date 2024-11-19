@@ -34,6 +34,10 @@ public class PlatformService : MonoBehaviour, IPlatformService
             {
                 platform = platformFactory.CreatePlatform(position, platformType);
             }
+            else
+            {
+                    platformFactory.UpdatePlatformScale(platform);
+            }
 
             return platform;
         }
@@ -47,9 +51,8 @@ public class PlatformService : MonoBehaviour, IPlatformService
         string platformType = platform.GetComponent<Platform>().GetType().Name;
         if (platformPools.ContainsKey(platformType))
         {
-            // Actualiza la escala antes de devolverla al pool
-            platformFactory.UpdatePlatformScale(platform);
             platformPools[platformType].ReturnObject(platform);
+            platformFactory.UpdatePlatformScale(platform);
         }
         else
         {
