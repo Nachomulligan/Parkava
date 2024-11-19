@@ -36,7 +36,8 @@ public class PlatformFactory : IPlatformFactory
 
     public void UpdatePlatformScale(GameObject platformObject)
     {
-        platformObject.transform.localScale = Vector3.one * currentScale;
+        Vector3 originalScale = platformObject.transform.localScale;
+        platformObject.transform.localScale = new Vector3(originalScale.x, originalScale.y, originalScale.z * currentScale);
 
         if (scalingUp)
         {
