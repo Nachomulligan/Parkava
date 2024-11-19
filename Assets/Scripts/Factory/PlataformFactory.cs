@@ -31,11 +31,10 @@ public class PlatformFactory : IPlatformFactory
 
         GameObject platformObject = GameObject.Instantiate(prefabs[platformType], position, Quaternion.identity);
         UpdatePlatformScale(platformObject);
-
         return platformObject;
     }
 
-    private void UpdatePlatformScale(GameObject platformObject)
+    public void UpdatePlatformScale(GameObject platformObject)
     {
         platformObject.transform.localScale = Vector3.one * currentScale;
 

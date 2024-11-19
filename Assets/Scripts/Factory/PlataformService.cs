@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -11,7 +11,7 @@ public class PlatformService : MonoBehaviour, IPlatformService
     {
         ServiceLocator.Instance.SetService(nameof(IPlatformService), this);
     }
-    //correr initialize
+
     public void Initialize(Dictionary<string, GameObject> prefabs, float minScale, float maxScale, float scaleStep, int initialPoolSize)
     {
         platformFactory = new PlatformFactory(prefabs, minScale, maxScale, scaleStep);
@@ -21,6 +21,7 @@ public class PlatformService : MonoBehaviour, IPlatformService
         {
             platformPools[kvp.Key] = new ObjectPool(kvp.Value, initialPoolSize, transform);
         }
+        Debug.Log($"PlatformService initialized with: MinScale={minScale}, MaxScale={maxScale}, ScaleStep={scaleStep}");
     }
 
     public GameObject GetPlatform(Vector3 position, string platformType)
@@ -28,7 +29,6 @@ public class PlatformService : MonoBehaviour, IPlatformService
         if (platformPools.ContainsKey(platformType))
         {
             GameObject platform = platformPools[platformType].GetObject(position);
-
 
             if (platform == null)
             {
@@ -47,6 +47,8 @@ public class PlatformService : MonoBehaviour, IPlatformService
         string platformType = platform.GetComponent<Platform>().GetType().Name;
         if (platformPools.ContainsKey(platformType))
         {
+            // Actualiza la escala antes de devolverla al pool
+            platformFactory.UpdatePlatformScale(platform);
             platformPools[platformType].ReturnObject(platform);
         }
         else

@@ -15,6 +15,7 @@ public class PlatformSpawner : MonoBehaviour
     public float minScale = 0.5f;
     public float maxScale = 1.5f;
     public float scaleStep = 0.1f;
+    public int initialPoolSize = 10;
 
     private IPlatformService platformService;
     private string[] platformTypes = { "LinePlatform", "DestructibleMovingPlatform" };
@@ -29,6 +30,15 @@ public class PlatformSpawner : MonoBehaviour
             Debug.LogError("PlatformService not found in ServiceLocator!");
             return;
         }
+
+        // Inicializar PlatformService con los datos del spawner
+        var prefabs = new Dictionary<string, GameObject>
+        {
+            { "LinePlatform", linePlatformPrefab },
+            { "DestructibleMovingPlatform", destructiblePlatformPrefab }
+        };
+
+        platformService.Initialize(prefabs, minScale, maxScale, scaleStep, initialPoolSize);
 
         InvokeRepeating(nameof(SpawnPlatform), 0f, spawnInterval);
     }

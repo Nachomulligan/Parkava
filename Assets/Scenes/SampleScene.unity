@@ -5200,9 +5200,10 @@ MonoBehaviour:
   spawnInterval: 0.91
   speed: 11.66
   platformLifetime: 6.76
-  minScale: 0.2
-  maxScale: 1000
+  minScale: 0.1
+  maxScale: 3000
   scaleStep: 20
+  initialPoolSize: 3
 --- !u!4 &1661114676
 Transform:
   m_ObjectHideFlags: 0
