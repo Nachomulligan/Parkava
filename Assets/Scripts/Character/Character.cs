@@ -1,4 +1,4 @@
-using HealthSystem;
+﻿using HealthSystem;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -14,6 +14,11 @@ public class Character : MonoBehaviour
     {
         health = new Health(1);
         health.OnDeath += Die;
+        var platformService = ServiceLocator.Instance.GetService(nameof(DestructiblePlatformService)) as DestructiblePlatformService;
+        if (platformService != null)
+        {
+            health.OnDeath += platformService.ReactivateAllPlatforms;
+        }
     }
 
     void Update()
@@ -55,14 +60,43 @@ public class Character : MonoBehaviour
         Debug.Log("Character has died.");
         gameObject.SetActive(false);
 
-        var checkpointManager = FindObjectOfType<CheckpointManager>();
-        if (checkpointManager != null)
+        var lifeService = ServiceLocator.Instance.GetService(nameof(LifeService)) as LifeService;
+
+        if (lifeService != null)
         {
-            checkpointManager.Respawn(gameObject);
+            lifeService.ReduceLife();
+
+            if (lifeService.GetCurrentLives() > 0)
+            {
+                var checkpointManager = FindObjectOfType<CheckpointManager>();
+                if (checkpointManager != null)
+                {
+                    checkpointManager.Respawn(gameObject);
+                }
+                else
+                {
+                    Debug.LogError("CheckpointManager not found in the scene.");
+                }
+            }
+            else
+            {
+                Debug.Log("Game Over: Permadeath triggered.");
+                lifeService.OnPermadeath += HandlePermadeath;
+            }
         }
         else
         {
-            Debug.LogError("CheckpointManager not found in the scene.");
+            Debug.LogError("LifeService not found in the scene.");
+        }
+    }
+    
+    private void HandlePermadeath()
+    {
+        Debug.Log("Game Over: Permadeath triggered.");
+        var platformService = ServiceLocator.Instance.GetService(nameof(DestructiblePlatformService)) as DestructiblePlatformService;
+        if (platformService != null)
+        {
+            health.OnDeath -= platformService.ReactivateAllPlatforms;
         }
     }
 
