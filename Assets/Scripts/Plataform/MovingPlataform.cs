@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -46,12 +46,20 @@ public class MovingPlataform : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        other.transform.SetParent(transform);
-        Debug.Log("intento");
+        if (other.CompareTag("Player")) 
+        {
+            other.transform.SetParent(transform);
+            Debug.Log("Personaje se unió a la plataforma");
+        }
     }
 
     private void OnTriggerExit(Collider other)
     {
-        other.transform.SetParent(null);
+        if (other.CompareTag("Player"))
+        {
+            other.transform.SetParent(null);
+            Debug.Log("Personaje se separó de la plataforma");
+        }
     }
+
 }
