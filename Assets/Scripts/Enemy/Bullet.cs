@@ -6,15 +6,19 @@ public class Bullet : MonoBehaviour
 {
     public BulletMovementStrategy movementStrategy;
     private Vector3 targetPosition;
-    private float lifetime = 5f; // Tiempo máximo de vida
+    private float lifetime = 5f; 
     private float lifeTimer;
+
+    public void SetMovementStrategy(BulletMovementStrategy strategy)
+    {
+        movementStrategy = strategy;
+    }
 
     public void SetTarget(Transform target)
     {
         targetPosition = target.position;
-        lifeTimer = 0f; // Reinicia el temporizador cuando se asigna un nuevo objetivo
+        lifeTimer = 0f; 
 
-        // Inicializa la estrategia de movimiento con la posición objetivo y la posición inicial
         if (movementStrategy != null)
         {
             movementStrategy.Initialize(targetPosition, transform.position);
@@ -28,7 +32,6 @@ public class Bullet : MonoBehaviour
             movementStrategy.Move(transform, targetPosition);
         }
 
-        // Destruir la bala después de cierto tiempo si no alcanza el objetivo
         lifeTimer += Time.deltaTime;
         if (lifeTimer >= lifetime)
         {

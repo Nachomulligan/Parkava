@@ -9,11 +9,13 @@ public class Enemy : MonoBehaviour
     public WeaponStrategy weaponStrategy;
     public Transform shootPoint;
     public GameObject bulletPrefab;
+    public BulletMovementStrategy defaultMovementStrategy;
     public Transform player;
     [SerializeField] private float shootPeriod = 1;
     [SerializeField] private float attackRange = 10;
     [SerializeField] private WaypointPath waypointPath;
     [SerializeField] private float movementSpeed = 2f;
+    
     private bool isShooting;
     private int currentWaypointIndex = 0;
     private Transform currentWaypoint;
@@ -22,17 +24,17 @@ public class Enemy : MonoBehaviour
 
     InjectableCommand _killCommand;
 
-    private void OnEnable()
-    {
-        CommandConsoleService console = null; //Get from service locator
-        _killCommand = new InjectableCommand($"Kill {name}", Die, DieWithArguments);
-        console.AddCommand(_killCommand);
-    }
-    private void OnDisable()
-    {
-        CommandConsoleService console = null; //Get from service locator
-        console.RemoveCommand(_killCommand);
-    }
+    //private void OnEnable()
+    //{
+    //    CommandConsoleService console = null; //Get from service locator
+    //    _killCommand = new InjectableCommand($"Kill {name}", Die, DieWithArguments);
+    //    console.AddCommand(_killCommand);
+    //}
+    //private void OnDisable()
+    //{
+    //    CommandConsoleService console = null; //Get from service locator
+    //    console.RemoveCommand(_killCommand);
+    //}
 
     private void Start()
     {
@@ -44,7 +46,6 @@ public class Enemy : MonoBehaviour
 
     private void Update()
     {
-        MoveAlongPath();
 
         if (Vector3.Distance(transform.position, player.position) < attackRange)
         {
@@ -78,7 +79,15 @@ public class Enemy : MonoBehaviour
     {
         while (!destroyCancellationToken.IsCancellationRequested)
         {
-            weaponStrategy.Shoot(shootPoint, bulletPrefab, player);
+            GameObject bulletObject = Instantiate(bulletPrefab, shootPoint.position, Quaternion.identity);
+            Bullet bullet = bulletObject.GetComponent<Bullet>();
+
+            if (bullet != null && defaultMovementStrategy != null)
+            {
+                bullet.SetMovementStrategy(defaultMovementStrategy);
+                bullet.SetTarget(player);
+            }
+
             yield return new WaitForSeconds(shootPeriod);
         }
     }
