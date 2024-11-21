@@ -18,7 +18,7 @@ public class PlatformSpawner : MonoBehaviour
     public int initialPoolSize = 10;
 
     [Header("Platform Direction")]
-    public bool isLeftDirection = false;
+    public Vector3 direction = Vector3.right;  
 
     private IPlatformService platformService;
     private string[] platformTypes = { "LinePlatform", "DestructibleMovingPlatform" };
@@ -54,9 +54,10 @@ public class PlatformSpawner : MonoBehaviour
 
         if (platformObject != null)
         {
-            Vector3 direction = isLeftDirection ? Vector3.left : Vector3.right;
+            Vector3 normalizedDirection = direction.normalized;
+
             Platform platformComponent = platformObject.GetComponent<Platform>();
-            platformComponent.Initialize(speed, direction);
+            platformComponent.Initialize(speed, normalizedDirection);
 
             StartCoroutine(DeactivateAfterTime(platformObject, platformLifetime));
         }
@@ -67,10 +68,14 @@ public class PlatformSpawner : MonoBehaviour
         yield return new WaitForSeconds(time);
         platformService.ReturnPlatform(platform);
     }
+
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.black;
 
         Gizmos.DrawSphere(transform.position, 2f);
+
+        Gizmos.color = Color.green;
+        Gizmos.DrawLine(transform.position, transform.position + direction.normalized * 2f);
     }
 }
