@@ -67,4 +67,10 @@ public class PlatformSpawner : MonoBehaviour
         yield return new WaitForSeconds(time);
         platformService.ReturnPlatform(platform);
     }
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.black;
+
+        Gizmos.DrawSphere(transform.position, 2f);
+    }
 }

@@ -40,6 +40,9 @@ public class ObjectPool
 
     public void ReturnObject(GameObject obj)
     {
+        Platform platform = obj.GetComponent<Platform>();
+        platform?.ResetPlatform();
+
         obj.SetActive(false);
         pool.Enqueue(obj);
     }

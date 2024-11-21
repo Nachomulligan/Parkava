@@ -6,6 +6,11 @@ public class DestructibleMovingPlatform : Platform
 {
     [SerializeField] private float disableDelay = 0.3f;
 
+    private void Update()
+    {
+        MovePlatform();
+    }
+
     private void OnCollisionEnter(Collision collision)
     {
         StartCoroutine(DisableAfterDelay());
@@ -14,30 +19,8 @@ public class DestructibleMovingPlatform : Platform
     private IEnumerator DisableAfterDelay()
     {
         yield return new WaitForSeconds(disableDelay);
+
+        ResetPlatform(); // Desasociar al jugador antes de desactivar
         gameObject.SetActive(false);
-    }
-
-    private void Update()
-    {
-        MovePlatform();
-    }
-    private void OnTriggerEnter(Collider other)
-    {
-
-        Debug.Log($"Trigger detectado con: {other.name}");
-        if (other.CompareTag("Player"))
-        {
-            other.transform.SetParent(transform);
-            Debug.Log("Personaje se unió a la plataforma lineal");
-        }
-    }
-
-    private void OnTriggerExit(Collider other)
-    {
-        if (other.transform.parent == transform)
-        {
-            other.transform.SetParent(null);
-            Debug.Log("Personaje se separó de la plataforma lineal");
-        }
     }
 }

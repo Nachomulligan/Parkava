@@ -36,7 +36,7 @@ public class PlatformService : MonoBehaviour, IPlatformService
             }
             else
             {
-                    platformFactory.UpdatePlatformScale(platform);
+                platformFactory.UpdatePlatformScale(platform);
             }
 
             return platform;
