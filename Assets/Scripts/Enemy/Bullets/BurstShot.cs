@@ -4,8 +4,8 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "BurstShot", menuName = "WeaponStrategies/BurstShot")]
 public class BurstShot : WeaponStrategy
 {
-    public int burstCount = 3;    
-    public float burstDelay = 0.5f; 
+    public int burstCount = 3;
+    public float burstDelay = 0.5f;
 
     public override void Shoot(Transform shootPoint, GameObject bulletPrefab, Transform target)
     {

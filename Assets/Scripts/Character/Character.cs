@@ -68,6 +68,12 @@ public class Character : MonoBehaviour
 
             if (lifeService.GetCurrentLives() > 0)
             {
+                var platformService = ServiceLocator.Instance.GetService(nameof(DestructiblePlatformService)) as DestructiblePlatformService;
+                if (platformService != null)
+                {
+                    Debug.Log("Reactivating platforms...");
+                    platformService.ReactivateAllPlatforms();
+                }
                 var checkpointManager = FindObjectOfType<CheckpointManager>();
                 if (checkpointManager != null)
                 {
@@ -89,7 +95,7 @@ public class Character : MonoBehaviour
             Debug.LogError("LifeService not found in the scene.");
         }
     }
-    
+
     private void HandlePermadeath()
     {
         Debug.Log("Game Over: Permadeath triggered.");
@@ -99,7 +105,6 @@ public class Character : MonoBehaviour
             health.OnDeath -= platformService.ReactivateAllPlatforms;
         }
     }
-
 
     private void OnDrawGizmos()
     {

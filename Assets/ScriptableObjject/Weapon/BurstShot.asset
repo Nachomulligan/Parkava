@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: BurstShot
   m_EditorClassIdentifier: 
   burstCount: 3
-  burstDelay: 0.2
+  burstDelay: 0.1

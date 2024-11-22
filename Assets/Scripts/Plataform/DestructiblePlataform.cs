@@ -8,7 +8,7 @@ public class DestructiblePlatform : MonoBehaviour
 
     private DestructiblePlatformService platformService;
 
-    private void Awake()
+    private void Start()
     {
         platformService = ServiceLocator.Instance.GetService(nameof(DestructiblePlatformService)) as DestructiblePlatformService;
 

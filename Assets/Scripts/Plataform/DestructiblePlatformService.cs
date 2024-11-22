@@ -25,6 +25,7 @@ public class DestructiblePlatformService : MonoBehaviour
 
     public void ReactivateAllPlatforms()
     {
+        Debug.Log("Reactivating all platforms...");
         foreach (var platform in destructiblePlatforms)
         {
             platform.Reactivate();
