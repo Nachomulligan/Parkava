@@ -71,4 +71,12 @@ public class GameManager : MonoBehaviour
     {
         ChangeState(new ConsoleState());
     }
+    public void GoToLoseState()
+    {
+        ChangeState(new LoseState());
+    }
+    public void GoToWinState()
+    {
+        ChangeState(new WinState());
+    }
 }

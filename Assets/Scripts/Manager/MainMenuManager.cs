@@ -5,21 +5,31 @@ using UnityEngine.SceneManagement;
 
 public class MainMenuManager : MonoBehaviour
 {
+    private SceneController _sceneController;
+
+    private void Awake()
+    {
+        _sceneController = FindObjectOfType<SceneController>();
+        if (_sceneController == null)
+        {
+            Debug.LogError("SceneController not found in the scene.");
+        }
+    }
 
     public void QuitGame()
     {
-        Application.Quit();
+        if (_sceneController != null)
+        {
+            _sceneController.QuitGame();
+        }
     }
-    public void LoadLevel0()
+
+    public void LoadScene(string sceneName)
     {
-        SceneManager.LoadScene(1);
-    }
-    public void LoadLevel1()
-    {
-        SceneManager.LoadScene(2);
-    }
-    public void LoadLevel2()
-    {
-        SceneManager.LoadScene(3);
+        if (_sceneController != null)
+        {
+            _sceneController.LoadSceneByName(sceneName);
+        }
     }
 }
+

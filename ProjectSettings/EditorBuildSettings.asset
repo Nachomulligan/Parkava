@@ -9,6 +9,12 @@ EditorBuildSettings:
     path: Assets/Scenes/Menu.unity
     guid: ee9e5c519d251b949aa432b2762b11c0
   - enabled: 1
-    path: Assets/Scenes/SampleScene.unity
+    path: Assets/Scenes/ParkourLevel.unity
     guid: 99c9720ab356a0642a771bea13969a05
+  - enabled: 1
+    path: Assets/Scenes/LoseScreen.unity
+    guid: 403acc0fe07a3b24a9c8b2262fa939e0
+  - enabled: 1
+    path: Assets/Scenes/WinScreen.unity
+    guid: 1081503d426b3cb4982a8e3b25a83da1
   m_configObjects: {}

@@ -99,11 +99,6 @@ public class Character : MonoBehaviour
     private void HandlePermadeath()
     {
         Debug.Log("Game Over: Permadeath triggered.");
-        var platformService = ServiceLocator.Instance.GetService(nameof(DestructiblePlatformService)) as DestructiblePlatformService;
-        if (platformService != null)
-        {
-            health.OnDeath -= platformService.ReactivateAllPlatforms;
-        }
     }
 
     private void OnDrawGizmos()

@@ -145,13 +145,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   weaponStrategy: {fileID: 11400000, guid: 50b375228a791f14facb30eaf43caf81, type: 2}
   shootPoint: {fileID: 654076180765872354}
-  bulletPrefab: {fileID: 6155893734903531724, guid: 33474582a45b793429bf2da95f0767ae,
+  bulletPrefab: {fileID: 6155893734903531724, guid: 3c58441291995bf4e9a8049aed3e35c4,
     type: 3}
+  defaultMovementStrategy: {fileID: 0}
   player: {fileID: 0}
   shootPeriod: 3
   attackRange: 10
-  waypointPath: {fileID: 0}
-  movementSpeed: 30
 --- !u!136 &8285008094271352947
 CapsuleCollider:
   m_ObjectHideFlags: 0

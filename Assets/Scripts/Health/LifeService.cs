@@ -15,6 +15,12 @@ public class LifeService : MonoBehaviour
     {
         ServiceLocator.Instance.SetService(nameof(LifeService), this);
         currentLives = maxLives;
+        OnPermadeath += HandlePermadeath;
+    }
+
+    private void OnDestroy()
+    {
+        OnPermadeath -= HandlePermadeath;
     }
 
     public void ReduceLife()
@@ -35,5 +41,20 @@ public class LifeService : MonoBehaviour
     public void ResetLives()
     {
         currentLives = maxLives;
+    }
+
+    private void HandlePermadeath()
+    {
+        Debug.Log("Game Over: Permadeath triggered.");
+
+        var gameManager = GameManager.Instance;
+        if (gameManager != null)
+        {
+            gameManager.GoToLoseState();
+        }
+        else
+        {
+            Debug.LogError("GameManager instance not found.");
+        }
     }
 }
