@@ -9,10 +9,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 98c5b306df30cda43a8f737a34a707ac, type: 3}
-  m_Name: SetPlayerHP_cmd
+  m_Script: {fileID: 11500000, guid: 119403ba111caea42b7e517d35e2bbe5, type: 3}
+  m_Name: SetLives
   m_EditorClassIdentifier: 
   <Aliases>k__BackingField:
-  - SetHP
-  - SetHealth
-  - set_hp
+  - SetLives
+  - setLives
+  - setlives

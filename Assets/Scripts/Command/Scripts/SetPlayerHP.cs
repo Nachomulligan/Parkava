@@ -1,16 +1,25 @@
 ﻿using UnityEngine;
 
 [CreateAssetMenu(menuName = "Commands/Set Player HP")]
-public class SetPlayerHP : Command
+public class SetPlayerHPCommand : Command
 {
-
     public override void Execute(string[] args)
     {
-        if (int.TryParse(args[0], out int hp))
+        if (args.Length == 0 || !int.TryParse(args[0], out int hp))
         {
-            Debug.Log($"{name}: HP = {hp}");
+            Debug.LogError($"{Name}: Invalid or missing argument. Usage: <HP Value>");
+            return;
+        }
+
+        Character character = FindObjectOfType<Character>();
+        if (character != null && character.health != null)
+        {
+            character.SetHP(hp);
+            Debug.Log($"{Name}: Player HP set to {hp}");
         }
         else
-            Debug.LogError($"{name}: {args[0]} is not an integer!", this);
+        {
+            Debug.LogError($"{Name}: Character or health component not found.");
+        }
     }
 }

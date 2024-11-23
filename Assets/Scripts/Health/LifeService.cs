@@ -57,4 +57,9 @@ public class LifeService : MonoBehaviour
             Debug.LogError("GameManager instance not found.");
         }
     }
+
+    internal void SetLives(int value)
+    {
+        currentLives = value;
+    }
 }

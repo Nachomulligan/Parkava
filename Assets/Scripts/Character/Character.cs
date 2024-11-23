@@ -55,6 +55,10 @@ public class Character : MonoBehaviour
         }
     }
 
+    public void SetHP(int value)
+    {
+        health = new Health(value);
+    }
     private void Die()
     {
         Debug.Log("Character has died.");
