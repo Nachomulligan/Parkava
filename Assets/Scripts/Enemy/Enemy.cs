@@ -58,7 +58,7 @@ public class Enemy : MonoBehaviour
                 bullet.SetMovementStrategy(defaultMovementStrategy);
                 bullet.SetTarget(player);
             }
-
+     
             yield return new WaitForSeconds(shootPeriod);
         }
     }

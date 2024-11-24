@@ -9,6 +9,12 @@ public class BurstShot : WeaponStrategy
 
     public override void Shoot(Transform shootPoint, GameObject bulletPrefab, Transform target)
     {
+        var audioService = ServiceLocator.Instance.GetService(nameof(AudioService)) as AudioService;
+        if (audioService != null)
+        {
+            audioService.PlaySFX("Burst");
+
+        }
         shootPoint.GetComponent<ShootPointController>().StartCoroutine(BurstFire(shootPoint, bulletPrefab, target));
     }
 

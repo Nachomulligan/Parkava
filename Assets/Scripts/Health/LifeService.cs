@@ -29,9 +29,16 @@ public class LifeService : MonoBehaviour
 
         currentLives--;
         OnLifeLost?.Invoke();
+        var audioService = ServiceLocator.Instance.GetService(nameof(AudioService)) as AudioService;
+        if (audioService != null)
+        {
+            audioService.PlaySFX("Die");
+
+        }
 
         if (currentLives == 0)
         {
+
             OnPermadeath?.Invoke();
         }
     }

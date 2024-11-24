@@ -7,6 +7,12 @@ public class SingleShot : WeaponStrategy
     {
         
         GameObject bullet = Instantiate(bulletPrefab, shootPoint.position, shootPoint.rotation);
+        var audioService = ServiceLocator.Instance.GetService(nameof(AudioService)) as AudioService;
+        if (audioService != null)
+        {
+            audioService.PlaySFX("Single");
+
+        }
         bullet.GetComponent<Bullet>().SetTarget(target); 
     }
 }

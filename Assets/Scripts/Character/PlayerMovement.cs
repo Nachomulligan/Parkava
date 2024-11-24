@@ -135,6 +135,12 @@ public class PlayerMovement : MonoBehaviour
 
         if (jumping)
         {
+            var audioService = ServiceLocator.Instance.GetService(nameof(AudioService)) as AudioService;
+            if (audioService != null)
+            {
+                audioService.PlaySFX("Jump");
+
+            }
             Jump();
             jumping = false;
         }
