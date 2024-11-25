@@ -44,7 +44,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] public float coyoteTime = 0.2f;
     private float coyoteTimeCounter;
     [SerializeField] private int maxJumpCount = 2;
-    private int currentJumpCount = 0;
+    public int currentJumpCount = 0;
 
     // Input
     float x, y;
@@ -135,12 +135,6 @@ public class PlayerMovement : MonoBehaviour
 
         if (jumping)
         {
-            var audioService = ServiceLocator.Instance.GetService(nameof(AudioService)) as AudioService;
-            if (audioService != null)
-            {
-                audioService.PlaySFX("Jump");
-
-            }
             Jump();
             jumping = false;
         }
@@ -216,7 +210,14 @@ public class PlayerMovement : MonoBehaviour
         if (grounded && readyToJump)
         {
             readyToJump = false;
-            currentJumpCount ++; 
+            currentJumpCount ++;
+            
+            var audioService = ServiceLocator.Instance.GetService(nameof(AudioService)) as AudioService;
+            if (audioService != null)
+            {
+                audioService.PlaySFX("Jump");
+
+            }
 
             rb.AddForce(Vector2.up * jumpForce * 1.5f);
             rb.AddForce(normalVector * jumpForce * 0.5f);
@@ -233,6 +234,12 @@ public class PlayerMovement : MonoBehaviour
         }
         else if (!grounded && currentJumpCount < maxJumpCount)
         {
+            var audioService = ServiceLocator.Instance.GetService(nameof(AudioService)) as AudioService;
+            if (audioService != null)
+            {
+                audioService.PlaySFX("Jump");
+
+            }
             currentJumpCount++;
             rb.AddForce(Vector2.up * jumpForce * 1.2f);
         }

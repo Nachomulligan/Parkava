@@ -18,6 +18,8 @@ public class LoseState : IState
     {
         Debug.Log("Entered Lose State");
 
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
         var sceneController = Object.FindObjectOfType<SceneController>();
         if (sceneController != null)
         {

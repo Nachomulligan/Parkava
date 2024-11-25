@@ -18,7 +18,8 @@ public class WinState : IState
     public void Enter()
     {
         Debug.Log("Entered Win State");
-
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
         var sceneController = Object.FindObjectOfType<SceneController>();
         if (sceneController != null)
         {
