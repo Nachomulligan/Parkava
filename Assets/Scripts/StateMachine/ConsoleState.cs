@@ -27,6 +27,6 @@ public class ConsoleState : IState
 
     public void Exit()
     {
-        Debug.Log("Exiting Pause State");
+        Debug.Log("Exiting Console State");
     }
 }
