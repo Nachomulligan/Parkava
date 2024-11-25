@@ -6,6 +6,15 @@ using static GameManager;
 public class PauseMenu : MonoBehaviour
 {
     [SerializeField] public GameObject pauseMenuUI;
+    private SceneController _sceneController;
+    private void Awake()
+    {
+        _sceneController = FindObjectOfType<SceneController>();
+        if (_sceneController == null)
+        {
+            Debug.LogError("SceneController not found in the scene.");
+        }
+    }
 
     private void Update()
     {
@@ -32,5 +41,20 @@ public class PauseMenu : MonoBehaviour
     {
         pauseMenuUI.SetActive(false);
         GameManager.Instance.GoToGameplay(); 
+    }
+
+    public void LoadScene(string sceneName)
+    {
+        if (_sceneController != null)
+        {
+            _sceneController.LoadSceneByName(sceneName);
+        }
+    }
+    public void QuitGame()
+    {
+        if (_sceneController != null)
+        {
+            _sceneController.QuitGame();
+        }
     }
 }
