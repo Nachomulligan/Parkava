@@ -14,7 +14,7 @@ public class Enemy : MonoBehaviour
     [SerializeField] private float attackRange = 10;
     private bool isShooting;
 
-    InjectableCommand _killCommand;
+    //InjectableCommand _killCommand;
 
     //private void OnEnable()
     //{
