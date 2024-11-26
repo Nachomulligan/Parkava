@@ -3,7 +3,7 @@ using UnityEngine;
 
 public abstract class Command : ScriptableObject, ICommand
 {
-    [field: SerializeField] public List<string> Aliases { get; set; }
+    [field: SerializeField] public List<string> Aliases { get; private set; }
 
     public string Name => name;
 

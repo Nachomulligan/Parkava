@@ -26,18 +26,15 @@ public class PlatformService : MonoBehaviour, IPlatformService
 
     public GameObject GetPlatform(Vector3 position, string platformType)
     {
-        if (platformPools.ContainsKey(platformType))
+        if (platformPools.TryGetValue(platformType, out var pool))
         {
-            GameObject platform = platformPools[platformType].GetObject(position);
+            GameObject platform = pool.GetObject(position);
 
             if (platform == null)
             {
                 platform = platformFactory.CreatePlatform(position, platformType);
             }
-            else
-            {
-                platformFactory.UpdatePlatformScale(platform);
-            }
+            platformFactory.UpdatePlatformScale(platform);
 
             return platform;
         }

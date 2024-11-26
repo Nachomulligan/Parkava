@@ -5,6 +5,6 @@ using System.IO;
 public interface ICommand
 {
     public string Name { get; }
-    public void Execute(string[] args);
+    public void Execute(params string[] args);
     public List<string> Aliases { get; }
 }

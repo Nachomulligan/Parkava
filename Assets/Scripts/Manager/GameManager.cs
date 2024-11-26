@@ -5,7 +5,7 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     private static GameManager _instance;
-    private StateMachine _stateMachine;
+    private StateMachine _stateMachine = new();
 
     public static GameManager Instance
     {
@@ -36,8 +36,6 @@ public class GameManager : MonoBehaviour
 
         _instance = this;
         DontDestroyOnLoad(this.gameObject);
-        
-        _stateMachine = new StateMachine();
         GoToGameplay();
     }
 

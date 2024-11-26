@@ -19,7 +19,8 @@ public class CommandConsoleService : MonoBehaviour
 
     public void AddCommand(ICommand command)
     {
-        if (!commandDictionary.TryAdd(command.Name, command))
+        var commandNameLowerCase = command.Name.ToLower();
+        if (!commandDictionary.TryAdd(commandNameLowerCase, command))
         {
             Debug.LogWarning($"Command '{command.Name}' already exists in the dictionary.");
         }
@@ -44,7 +45,8 @@ public class CommandConsoleService : MonoBehaviour
 
     public void ExecuteCommand(string alias, params string[] args)
     {
-        if (commandDictionary.TryGetValue(alias, out ICommand command))
+        var aliasLowerCase = alias.ToLower();
+        if (commandDictionary.TryGetValue(aliasLowerCase, out ICommand command))
         {
             command.Execute(args);
         }
