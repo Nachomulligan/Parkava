@@ -5,6 +5,11 @@ using UnityEngine.SceneManagement;
 
 public class SceneController : MonoBehaviour
 {
+    private void Awake()
+    {
+        ServiceLocator.Instance.SetService(nameof(SceneController), this);
+    }
+
     public void LoadSceneByName(string sceneName)
     {
         if (string.IsNullOrEmpty(sceneName))

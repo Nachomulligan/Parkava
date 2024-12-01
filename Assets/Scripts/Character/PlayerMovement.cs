@@ -60,6 +60,7 @@ public class PlayerMovement : MonoBehaviour
     void Awake()
     {
         rb = GetComponent<Rigidbody>();
+        ServiceLocator.Instance.SetService(nameof(PlayerMovement), this);
     }
 
     void Start()

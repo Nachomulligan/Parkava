@@ -9,7 +9,7 @@ public class Checkpoint : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            var checkpointManager = FindObjectOfType<CheckpointManager>();
+            var checkpointManager = ServiceLocator.Instance.GetService(nameof(CheckpointManager)) as CheckpointManager;
             if (checkpointManager != null)
             {
                 checkpointManager.SetCheckpoint(transform);

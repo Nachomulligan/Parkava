@@ -20,7 +20,7 @@ public class HUDManager : MonoBehaviour
             Debug.LogError("LifeService no encontrado en el ServiceLocator.");
             return;
         }
-        playerMovement = FindObjectOfType<PlayerMovement>();
+        playerMovement = ServiceLocator.Instance.GetService(nameof(PlayerMovement)) as PlayerMovement;
         if (playerMovement == null)
         {
             Debug.LogError("PlayerMovement no encontrado en la escena.");

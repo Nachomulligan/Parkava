@@ -9,10 +9,10 @@ public class SetMaxJumpCountCommand : Command
     {
         if (int.TryParse(args[0], out int jumpCount))
         {
-            PlayerMovement player = FindObjectOfType<PlayerMovement>();
-            if (player != null)
+            var playerMovement = ServiceLocator.Instance.GetService(nameof(PlayerMovement)) as PlayerMovement;
+            if (playerMovement != null)
             {
-                player.SetMaxJumpCount(jumpCount);
+                playerMovement.SetMaxJumpCount(jumpCount);
                 Debug.Log($"{Name}: Max Jump Count set to {jumpCount}");
             }
         }

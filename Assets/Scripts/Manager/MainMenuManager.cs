@@ -9,26 +9,28 @@ public class MainMenuManager : MonoBehaviour
 
     private void Awake()
     {
-        _sceneController = FindObjectOfType<SceneController>();
+        _sceneController = ServiceLocator.Instance.GetService(nameof(SceneController)) as SceneController;
         if (_sceneController == null)
         {
-            Debug.LogError("SceneController not found in the scene.");
+            Debug.LogError($"{nameof(SceneController)} not found in the ServiceLocator.");
         }
     }
 
     public void QuitGame()
     {
-        if (_sceneController != null)
+        var sceneController = ServiceLocator.Instance.GetService(nameof(SceneController)) as SceneController;
+        if (sceneController != null)
         {
-            _sceneController.QuitGame();
+            sceneController.QuitGame();
         }
     }
 
     public void LoadScene(string sceneName)
     {
-        if (_sceneController != null)
+        var sceneController = ServiceLocator.Instance.GetService(nameof(SceneController)) as SceneController;
+        if (sceneController != null)
         {
-            _sceneController.LoadSceneByName(sceneName);
+            sceneController.LoadSceneByName(sceneName);
         }
     }
 }

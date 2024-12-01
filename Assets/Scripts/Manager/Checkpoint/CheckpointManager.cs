@@ -6,6 +6,10 @@ public class CheckpointManager : MonoBehaviour
 {
     private Transform lastCheckpoint;
 
+    private void Awake()
+    {
+        ServiceLocator.Instance.SetService(nameof(CheckpointManager), this);
+    }
     public void SetCheckpoint(Transform checkpoint)
     {
         lastCheckpoint = checkpoint;

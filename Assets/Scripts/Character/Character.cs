@@ -10,6 +10,11 @@ public class Character : MonoBehaviour
     [SerializeField] private LayerMask interactionLayer;
     private Collider[] interactables = new Collider[5];
     public IHealth health;
+
+    private void Awake()
+    {
+        ServiceLocator.Instance.SetService(nameof(Character), this);
+    }
     void Start()
     {
         health = new Health(1);
@@ -78,14 +83,14 @@ public class Character : MonoBehaviour
                     Debug.Log("Reactivating platforms...");
                     platformService.ReactivateAllPlatforms();
                 }
-                var checkpointManager = FindObjectOfType<CheckpointManager>();
+                var checkpointManager = ServiceLocator.Instance.GetService(nameof(CheckpointManager)) as CheckpointManager;
                 if (checkpointManager != null)
                 {
                     checkpointManager.Respawn(gameObject);
                 }
                 else
                 {
-                    Debug.LogError("CheckpointManager not found in the scene.");
+                    Debug.LogError("CheckpointManager not found in the ServiceLocator.");
                 }
             }
             else

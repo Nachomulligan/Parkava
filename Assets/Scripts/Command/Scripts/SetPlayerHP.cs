@@ -11,7 +11,7 @@ public class SetPlayerHPCommand : Command
             return;
         }
 
-        Character character = FindObjectOfType<Character>();
+        Character character = ServiceLocator.Instance.GetService(nameof(Character)) as Character;
         if (character != null && character.health != null)
         {
             character.SetHP(hp);

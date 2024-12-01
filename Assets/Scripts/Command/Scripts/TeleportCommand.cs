@@ -15,7 +15,7 @@ public class TeleportCommand : Command
 
         if (float.TryParse(args[0], out float x) && float.TryParse(args[1], out float y) && float.TryParse(args[2], out float z))
         {
-            Character character = FindObjectOfType<Character>();
+            var character = ServiceLocator.Instance.GetService(nameof(Character)) as Character;
             if (character != null)
             {
                 character.transform.position = new Vector3(x, y, z);
