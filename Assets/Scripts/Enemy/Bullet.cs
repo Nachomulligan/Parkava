@@ -6,7 +6,7 @@ public class Bullet : MonoBehaviour
 {
     public BulletMovementStrategy movementStrategy;
     private Vector3 targetPosition;
-    private float lifetime = 5f;
+    private float lifetime = 10f;
     private float lifeTimer;
     private int damage = 1;
     public void SetMovementStrategy(BulletMovementStrategy strategy)
@@ -35,7 +35,7 @@ public class Bullet : MonoBehaviour
         lifeTimer += Time.deltaTime;
         if (lifeTimer >= lifetime)
         {
-            Destroy(gameObject);
+            gameObject.SetActive(false);
         }
     }
 
@@ -47,7 +47,7 @@ public class Bullet : MonoBehaviour
             if (character != null && other.gameObject == character.gameObject)
             {
                 character.health.TakeDamage(damage);
-                Destroy(gameObject);
+                gameObject.SetActive(false);
             }
         }
     }
