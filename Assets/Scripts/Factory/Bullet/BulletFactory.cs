@@ -6,7 +6,6 @@ public class BulletFactory : IBulletFactory
 {
     private GameObject bulletPrefab;
     private float currentScale;
-    private bool scalingUp = true;
 
     private float minScale;
     private float maxScale;
@@ -25,6 +24,7 @@ public class BulletFactory : IBulletFactory
     {
         GameObject bulletObject = GameObject.Instantiate(bulletPrefab, position, Quaternion.identity);
         UpdateBulletScale(bulletObject);
+        UpdateBulletColor(bulletObject);
         return bulletObject;
     }
 
@@ -32,5 +32,17 @@ public class BulletFactory : IBulletFactory
     {
         float randomScale = Random.Range(minScale, maxScale);
         bulletObject.transform.localScale = new Vector3(randomScale, randomScale, randomScale);
+    }
+
+    public void UpdateBulletColor(GameObject bulletObject)
+    {
+        Renderer renderer = bulletObject.GetComponent<Renderer>();
+        if (renderer != null && renderer.material.HasProperty("_EmissionColor"))
+        {
+            Color randomEmissionColor = new Color(Random.value, Random.value, Random.value);
+            renderer.material.SetColor("_EmissionColor", randomEmissionColor);
+
+            renderer.material.EnableKeyword("_EMISSION");
+        }
     }
 }

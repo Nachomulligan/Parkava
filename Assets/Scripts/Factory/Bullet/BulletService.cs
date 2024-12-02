@@ -27,10 +27,8 @@ public class BulletService : MonoBehaviour, IBulletService
         {
             bullet = bulletFactory.CreateBullet(position);
         }
-        else
-        {
-            bulletFactory.UpdateBulletScale(bullet);
-        }
+        bulletFactory.UpdateBulletScale(bullet);
+        bulletFactory.UpdateBulletColor(bullet);
 
         return bullet;
     }

@@ -5,4 +5,5 @@ public interface IBulletFactory
 {
     GameObject CreateBullet(Vector3 position);
     void UpdateBulletScale(GameObject bulletObject);
+    void UpdateBulletColor(GameObject bulletObject);
 }
