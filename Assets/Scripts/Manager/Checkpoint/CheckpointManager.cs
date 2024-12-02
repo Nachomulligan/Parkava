@@ -22,9 +22,16 @@ public class CheckpointManager : MonoBehaviour
         {
             player.transform.position = lastCheckpoint.position;
             player.SetActive(true);
-            var health = player.GetComponent<Character>().health;
-            health.Heal(health.GetMaxHealth());
-            Debug.Log("Player respawned at: " + lastCheckpoint.position);
+            var character = ServiceLocator.Instance.GetService(nameof(Character)) as Character;
+            if (character != null && character.health != null)
+            {
+                character.health.Heal(character.health.GetMaxHealth());
+                Debug.Log("Player respawned at: " + lastCheckpoint.position);
+            }
+            else
+            {
+                Debug.LogError("Character or its health component not found in ServiceLocator.");
+            }
         }
         else
         {

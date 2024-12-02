@@ -41,12 +41,14 @@ public class Bullet : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        Character character = other.GetComponent<Character>();
-        if (character != null)
+        if (other.CompareTag("Player"))
         {
-            character.health.TakeDamage(damage);
-
-            Destroy(gameObject);
+            var character = ServiceLocator.Instance.GetService(nameof(Character)) as Character;
+            if (character != null && other.gameObject == character.gameObject)
+            {
+                character.health.TakeDamage(damage);
+                Destroy(gameObject);
+            }
         }
     }
 
