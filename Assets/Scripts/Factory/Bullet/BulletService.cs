@@ -5,7 +5,7 @@ using UnityEngine;
 public class BulletService : MonoBehaviour, IBulletService
 {
     private ObjectPool bulletPool;
-    private IBulletFactory bulletFactory;
+    private BulletFactory bulletFactory;
 
     private void Awake()
     {
@@ -25,10 +25,10 @@ public class BulletService : MonoBehaviour, IBulletService
 
         if (bullet == null)
         {
-            bullet = bulletFactory.CreateBullet(position);
+            bullet = bulletFactory.Create(position);
         }
-        bulletFactory.UpdateBulletScale(bullet);
-        bulletFactory.UpdateBulletColor(bullet);
+        bulletFactory.UpdateScale(bullet);
+        bulletFactory.UpdateColor(bullet);
 
         return bullet;
     }

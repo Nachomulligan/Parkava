@@ -5,7 +5,7 @@ using UnityEngine;
 public class PlatformService : MonoBehaviour, IPlatformService
 {
     private Dictionary<string, ObjectPool> platformPools;
-    private IPlatformFactory platformFactory;
+    private PlatformFactory platformFactory;
 
     private void Awake()
     {
@@ -32,9 +32,9 @@ public class PlatformService : MonoBehaviour, IPlatformService
 
             if (platform == null)
             {
-                platform = platformFactory.CreatePlatform(position, platformType);
+                platform = platformFactory.Create(position, platformType);
             }
-            platformFactory.UpdatePlatformScale(platform);
+            platformFactory.UpdateScale(platform);
 
             return platform;
         }
@@ -49,7 +49,7 @@ public class PlatformService : MonoBehaviour, IPlatformService
         if (platformPools.ContainsKey(platformType))
         {
             platformPools[platformType].ReturnObject(platform);
-            platformFactory.UpdatePlatformScale(platform);
+            platformFactory.UpdateScale(platform);
         }
         else
         {
