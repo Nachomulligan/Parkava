@@ -7,7 +7,7 @@ public class MainMenuManager : MonoBehaviour
 {
     private SceneController _sceneController;
 
-    private void Awake()
+    private void Start()
     {
         _sceneController = ServiceLocator.Instance.GetService(nameof(SceneController)) as SceneController;
         if (_sceneController == null)

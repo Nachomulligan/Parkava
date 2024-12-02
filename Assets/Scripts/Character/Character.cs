@@ -64,6 +64,21 @@ public class Character : MonoBehaviour
     {
         health = new Health(value);
     }
+
+    public void SetShield(int shieldAmount)
+    {
+        if (health is ShieldDecorator shieldDecorator)
+        {
+            shieldDecorator.SetShield(shieldAmount);
+        }
+        else
+        {
+            health = new ShieldDecorator(health, shieldAmount);
+        }
+
+        Debug.Log($"Shield set to {shieldAmount}");
+    }
+
     private void Die()
     {
         Debug.Log("Character has died.");
