@@ -13,7 +13,7 @@ public class Enemy : MonoBehaviour
     [SerializeField] private float shootPeriod = 1;
     [SerializeField] private float attackRange = 10;
     private bool isShooting;
-
+    private IBulletService bulletService;
     //InjectableCommand _killCommand;
 
     //private void OnEnable()
@@ -27,7 +27,19 @@ public class Enemy : MonoBehaviour
     //    CommandConsoleService console = null; //Get from service locator
     //    console.RemoveCommand(_killCommand);
     //}
+    private void Start()
+    {
+        bulletService = ServiceLocator.Instance.GetService(nameof(IBulletService)) as IBulletService;
 
+        if (bulletService == null)
+        {
+            Debug.LogError("BulletService not found in ServiceLocator!");
+            return;
+        }
+
+        // Inicialización del servicio con un solo prefab
+        bulletService.Initialize(bulletPrefab, 0.5f, 1.5f, 0.1f, 10);
+    }
     private void Update()
     {
 
@@ -48,9 +60,9 @@ public class Enemy : MonoBehaviour
 
     private IEnumerator Shoot()
     {
-        while (!destroyCancellationToken.IsCancellationRequested)
+        while (true)
         {
-            GameObject bulletObject = Instantiate(bulletPrefab, shootPoint.position, Quaternion.identity);
+            GameObject bulletObject = bulletService.GetBullet(shootPoint.position);
             Bullet bullet = bulletObject.GetComponent<Bullet>();
 
             if (bullet != null && defaultMovementStrategy != null)
@@ -58,11 +70,10 @@ public class Enemy : MonoBehaviour
                 bullet.SetMovementStrategy(defaultMovementStrategy);
                 bullet.SetTarget(player);
             }
-     
+
             yield return new WaitForSeconds(shootPeriod);
         }
     }
-
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.red;
