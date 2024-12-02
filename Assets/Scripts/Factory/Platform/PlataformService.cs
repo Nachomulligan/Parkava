@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class PlatformService : MonoBehaviour, IPlatformService
 {
-    private Dictionary<string, ObjectPool> platformPools;
     private PlatformFactory platformFactory;
 
     private void Awake()
@@ -12,48 +11,22 @@ public class PlatformService : MonoBehaviour, IPlatformService
         ServiceLocator.Instance.SetService(nameof(IPlatformService), this);
     }
 
-    public void Initialize(Dictionary<string, GameObject> prefabs, float minScale, float maxScale, float scaleStep, int initialPoolSize)
+    public void Initialize(List<GameObject> prefabs, float minScale, float maxScale, float scaleStep)
     {
         platformFactory = new PlatformFactory(prefabs, minScale, maxScale, scaleStep);
-        platformPools = new Dictionary<string, ObjectPool>();
-
-        foreach (var kvp in prefabs)
-        {
-            platformPools[kvp.Key] = new ObjectPool(kvp.Value, initialPoolSize, transform);
-        }
         Debug.Log($"PlatformService initialized with: MinScale={minScale}, MaxScale={maxScale}, ScaleStep={scaleStep}");
     }
 
-    public GameObject GetPlatform(Vector3 position, string platformType)
+    public GameObject GetPlatform(Vector3 position)
     {
-        if (platformPools.TryGetValue(platformType, out var pool))
-        {
-            GameObject platform = pool.GetObject(position);
-
-            if (platform == null)
-            {
-                platform = platformFactory.Create(position, platformType);
-            }
-            platformFactory.UpdateScale(platform);
-
-            return platform;
-        }
-
-        Debug.LogError($"Platform type {platformType} not found in pool.");
-        return null;
+        GameObject platform = platformFactory.Create(position);
+        platformFactory.UpdateScale(platform);
+        return platform;
     }
 
     public void ReturnPlatform(GameObject platform)
     {
-        string platformType = platform.GetComponent<Platform>().GetType().Name;
-        if (platformPools.ContainsKey(platformType))
-        {
-            platformPools[platformType].ReturnObject(platform);
-            platformFactory.UpdateScale(platform);
-        }
-        else
-        {
-            Debug.LogError($"Platform type {platformType} not found in pool.");
-        }
+        // Implementación para devolver plataformas si es necesario
+        platformFactory.UpdateScale(platform);
     }
 }

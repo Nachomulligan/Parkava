@@ -15,14 +15,11 @@ public class PlatformSpawner : MonoBehaviour
     public float minScale = 0.5f;
     public float maxScale = 1.5f;
     public float scaleStep = 0.1f;
-    public int initialPoolSize = 10;
-
-    [Header("Platform Direction")]
-    public Vector3 direction = Vector3.right;  
 
     private IPlatformService platformService;
-    private string[] platformTypes = { "LinePlatform", "DestructibleMovingPlatform" };
-    private int currentPlatformIndex = 0;
+
+    [Header("Platform Direction")]
+    public Vector3 direction = Vector3.right;
 
     private void Start()
     {
@@ -34,23 +31,16 @@ public class PlatformSpawner : MonoBehaviour
             return;
         }
 
-        var prefabs = new Dictionary<string, GameObject>
-        {
-            { "LinePlatform", linePlatformPrefab },
-            { "DestructibleMovingPlatform", destructiblePlatformPrefab }
-        };
+        var prefabs = new List<GameObject> { linePlatformPrefab, destructiblePlatformPrefab };
 
-        platformService.Initialize(prefabs, minScale, maxScale, scaleStep, initialPoolSize);
+        platformService.Initialize(prefabs, minScale, maxScale, scaleStep);
 
         InvokeRepeating(nameof(SpawnPlatform), 0f, spawnInterval);
     }
 
     private void SpawnPlatform()
     {
-        string platformType = platformTypes[currentPlatformIndex];
-        currentPlatformIndex = (currentPlatformIndex + 1) % platformTypes.Length;
-
-        GameObject platformObject = platformService.GetPlatform(spawnPosition, platformType);
+        GameObject platformObject = platformService.GetPlatform(spawnPosition);
 
         if (platformObject != null)
         {
@@ -67,15 +57,5 @@ public class PlatformSpawner : MonoBehaviour
     {
         yield return new WaitForSeconds(time);
         platformService.ReturnPlatform(platform);
-    }
-
-    private void OnDrawGizmos()
-    {
-        Gizmos.color = Color.black;
-
-        Gizmos.DrawSphere(transform.position, 2f);
-
-        Gizmos.color = Color.green;
-        Gizmos.DrawLine(transform.position, transform.position + direction.normalized * 2f);
     }
 }
