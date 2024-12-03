@@ -11097,7 +11097,7 @@ PrefabInstance:
     - target: {fileID: 1013793631680803051, guid: 0156b9a2d05a567499a15889823c166f,
         type: 3}
       propertyPath: m_text
-      value: SetShield25
+      value: SetShield100000
       objectReference: {fileID: 0}
     - target: {fileID: 1013793631680803051, guid: 0156b9a2d05a567499a15889823c166f,
         type: 3}
@@ -11927,7 +11927,7 @@ PrefabInstance:
     - target: {fileID: 7265456421408076603, guid: 0156b9a2d05a567499a15889823c166f,
         type: 3}
       propertyPath: arguments
-      value: 25
+      value: 100000
       objectReference: {fileID: 0}
     - target: {fileID: 7265456421408076603, guid: 0156b9a2d05a567499a15889823c166f,
         type: 3}
