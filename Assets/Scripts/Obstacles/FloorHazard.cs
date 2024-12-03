@@ -6,7 +6,7 @@ public class FloorHazard : MonoBehaviour
 {
     [SerializeField] private int Damage;
 
-    private void OnTriggerEnter(Collider other)
+    private void OnTriggerStay(Collider other)
     {
         if (other.CompareTag("Player"))
         {

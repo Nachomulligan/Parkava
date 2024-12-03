@@ -11097,7 +11097,7 @@ PrefabInstance:
     - target: {fileID: 1013793631680803051, guid: 0156b9a2d05a567499a15889823c166f,
         type: 3}
       propertyPath: m_text
-      value: SetShield3
+      value: SetShield25
       objectReference: {fileID: 0}
     - target: {fileID: 1013793631680803051, guid: 0156b9a2d05a567499a15889823c166f,
         type: 3}
@@ -12922,7 +12922,6 @@ MonoBehaviour:
   minScale: 0.8
   maxScale: 1
   scaleStep: 0.1
-  initialPoolSize: 10
   direction: {x: 1, y: 0, z: 0}
 --- !u!4 &1661114676
 Transform:
