@@ -26,7 +26,6 @@ public class PlatformService : MonoBehaviour, IPlatformService
 
     public void ReturnPlatform(GameObject platform)
     {
-        // Implementación para devolver plataformas si es necesario
         platformFactory.UpdateScale(platform);
     }
 }
