@@ -21,6 +21,9 @@ public class PlatformSpawner : MonoBehaviour
     [Header("Platform Direction")]
     public Vector3 direction = Vector3.right;
 
+    [Header("Pooling Settings")]
+    public int initialPoolSize = 10;
+
     private void Start()
     {
         platformService = ServiceLocator.Instance.GetService(nameof(IPlatformService)) as IPlatformService;
@@ -33,7 +36,7 @@ public class PlatformSpawner : MonoBehaviour
 
         var prefabs = new List<GameObject> { linePlatformPrefab, destructiblePlatformPrefab };
 
-        platformService.Initialize(prefabs, minScale, maxScale, scaleStep);
+        platformService.Initialize(prefabs, minScale, maxScale, scaleStep, initialPoolSize);
 
         InvokeRepeating(nameof(SpawnPlatform), 0f, spawnInterval);
     }

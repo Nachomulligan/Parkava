@@ -5,6 +5,6 @@ using UnityEngine;
 public interface IPlatformService
 {
     GameObject GetPlatform(Vector3 position);
-    void Initialize(List<GameObject> prefabs, float minScale, float maxScale, float scaleStep);
+    void Initialize(List<GameObject> prefabs, float minScale, float maxScale, float scaleStep, int initialPoolSize);
     void ReturnPlatform(GameObject platform);
 }

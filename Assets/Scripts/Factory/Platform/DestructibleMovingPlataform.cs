@@ -20,7 +20,7 @@ public class DestructibleMovingPlatform : Platform
     {
         yield return new WaitForSeconds(disableDelay);
 
-        ResetPlatform(); // Desasociar al jugador antes de desactivar
+        ResetPlatform(); 
         gameObject.SetActive(false);
     }
 }

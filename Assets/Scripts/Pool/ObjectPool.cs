@@ -6,7 +6,10 @@ public class ObjectPool
     private Queue<GameObject> pool = new Queue<GameObject>();
     private GameObject prefab;
     private Transform parent;
-
+    public List<GameObject> GetAllPooledObjects()
+    {
+        return new List<GameObject>(pool);
+    }
     public ObjectPool(GameObject prefab, int initialSize, Transform parent = null)
     {
         this.prefab = prefab;
