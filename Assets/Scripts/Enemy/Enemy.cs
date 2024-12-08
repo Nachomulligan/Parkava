@@ -14,19 +14,6 @@ public class Enemy : MonoBehaviour
     [SerializeField] private float attackRange = 10;
     private bool isShooting;
     private IBulletService bulletService;
-    //InjectableCommand _killCommand;
-
-    //private void OnEnable()
-    //{
-    //    CommandConsoleService console = null; //Get from service locator
-    //    _killCommand = new InjectableCommand($"Kill {name}", Die, DieWithArguments);
-    //    console.AddCommand(_killCommand);
-    //}
-    //private void OnDisable()
-    //{
-    //    CommandConsoleService console = null; //Get from service locator
-    //    console.RemoveCommand(_killCommand);
-    //}
     private void Start()
     {
         bulletService = ServiceLocator.Instance.GetService(nameof(IBulletService)) as IBulletService;
@@ -37,7 +24,6 @@ public class Enemy : MonoBehaviour
             return;
         }
 
-        // Inicialización del servicio con un solo prefab
         bulletService.Initialize(bulletPrefab, 0.5f, 1.5f, 0.1f, 10);
     }
     private void Update()
@@ -78,15 +64,5 @@ public class Enemy : MonoBehaviour
     {
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, attackRange);
-    }
-
-
-    private void DieWithArguments(string[] obj)
-    {
-        throw new NotImplementedException();
-    }
-    public void Die()
-    {
-
     }
 }

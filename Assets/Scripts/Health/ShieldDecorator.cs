@@ -19,9 +19,13 @@ namespace HealthSystem
         {
             _shield = shieldAmount;
         }
+
+        /// <summary>
+        /// shield absorbs damage first, then base health takes remaining damage
+        /// </summary>
+        /// <param name="damagePoints"></param>
         public void TakeDamage(int damagePoints)
         {
-            // shield absorbs damage first, then base health takes remaining damage
             if (damagePoints < 0) return;
 
             if (_shield > 0)

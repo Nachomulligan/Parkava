@@ -9,7 +9,11 @@ public class Character : MonoBehaviour
     [SerializeField] private float interactionRadius;
     [SerializeField] private LayerMask interactionLayer;
     private Collider[] interactables = new Collider[5];
+
+    [Header("Health Settings")]
     public IHealth health;
+    [SerializeField] private int initialHealth = 1;
+    
 
     private void Awake()
     {
@@ -17,7 +21,7 @@ public class Character : MonoBehaviour
     }
     void Start()
     {
-        health = new Health(1);
+        health = new Health(initialHealth);
         health.OnDeath += Die;
         var platformService = ServiceLocator.Instance.GetService(nameof(DestructiblePlatformService)) as DestructiblePlatformService;
         if (platformService != null)
@@ -129,7 +133,5 @@ public class Character : MonoBehaviour
     {
         Gizmos.color = Color.yellow;
         Gizmos.DrawWireSphere(interactionPoint.position, interactionRadius);
-
     }
-
 }
