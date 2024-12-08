@@ -1,38 +1,65 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
 public class PlatformService : MonoBehaviour, IPlatformService
 {
+    private Dictionary<string, ObjectPool> platformPools;
     private PlatformFactory platformFactory;
-    private ObjectPool platformPool;
+    private List<string> platformTypes;
+    private int currentPlatformIndex;
+
     private void Awake()
     {
         ServiceLocator.Instance.SetService(nameof(IPlatformService), this);
     }
 
-    public void Initialize(List<GameObject> prefabs, float minScale, float maxScale, float scaleStep, int initialPoolSize)
+    public void Initialize(Dictionary<string, GameObject> prefabs, float minScale, float maxScale, float scaleStep, int initialPoolSize)
     {
-        platformFactory = new PlatformFactory(prefabs, minScale, maxScale, scaleStep);
-        platformPool = new ObjectPool(prefabs[0], initialPoolSize, transform);
-        Debug.Log($"PlatformService initialized with: MinScale={minScale}, MaxScale={maxScale}, ScaleStep={scaleStep}");
+        platformFactory = new PlatformFactory(new List<GameObject>(prefabs.Values), minScale, maxScale, scaleStep);
+        platformPools = new Dictionary<string, ObjectPool>();
+        platformTypes = new List<string>(prefabs.Keys);
+
+        foreach (var kvp in prefabs)
+        {
+            platformPools[kvp.Key] = new ObjectPool(kvp.Value, initialPoolSize, transform);
+        }
+
+        Debug.Log($"PlatformService initialized with {platformPools.Count} platform types.");
     }
 
     public GameObject GetPlatform(Vector3 position)
     {
-        GameObject platform = platformPool.GetObject(position);
+        string currentPlatformType = platformTypes[currentPlatformIndex];
+        currentPlatformIndex = (currentPlatformIndex + 1) % platformTypes.Count;
 
-        if (platform == null)
+        if (platformPools.ContainsKey(currentPlatformType))
         {
-            platform = platformFactory.Create(position);
+            GameObject platform = platformPools[currentPlatformType].GetObject(position);
+
+            if (platform == null)
+            {
+                platform = platformFactory.Create(position);
+            }
+           
+           platformFactory.UpdateScale(platform);
+            return platform;
         }
 
-        platformFactory.UpdateScale(platform);
-        return platform;
+        Debug.LogError($"Platform type {currentPlatformType} not found in pool.");
+        return null;
     }
 
     public void ReturnPlatform(GameObject platform)
     {
-        platformPool.ReturnObject(platform);
+        string platformType = platform.GetComponent<Platform>().GetType().Name;
+
+        if (platformPools.ContainsKey(platformType))
+        {
+            platformPools[platformType].ReturnObject(platform);
+        }
+        else
+        {
+            Debug.LogError($"Platform type {platformType} not found in pool.");
+        }
     }
 }

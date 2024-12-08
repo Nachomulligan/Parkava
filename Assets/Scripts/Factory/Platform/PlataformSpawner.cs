@@ -34,7 +34,11 @@ public class PlatformSpawner : MonoBehaviour
             return;
         }
 
-        var prefabs = new List<GameObject> { linePlatformPrefab, destructiblePlatformPrefab };
+        var prefabs = new Dictionary<string, GameObject>
+    {
+        { "LinePlatform", linePlatformPrefab },
+        { "DestructibleMovingPlatform", destructiblePlatformPrefab }
+    };
 
         platformService.Initialize(prefabs, minScale, maxScale, scaleStep, initialPoolSize);
 
@@ -60,5 +64,14 @@ public class PlatformSpawner : MonoBehaviour
     {
         yield return new WaitForSeconds(time);
         platformService.ReturnPlatform(platform);
+    }
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.black;
+
+        Gizmos.DrawSphere(transform.position, 2f);
+
+        Gizmos.color = Color.green;
+        Gizmos.DrawLine(transform.position, transform.position + direction.normalized * 2f);
     }
 }
