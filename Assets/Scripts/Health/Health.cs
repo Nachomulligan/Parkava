@@ -23,7 +23,6 @@ namespace HealthSystem
         /// <param name="damagePoints"></param>
         public void TakeDamage(int damagePoints)
         {
-            // 
             if (damagePoints < 0) return;
             _hp = Mathf.Clamp(_hp - damagePoints, 0, MaxHP);
             if (_hp <= 0) OnDeath?.Invoke();
