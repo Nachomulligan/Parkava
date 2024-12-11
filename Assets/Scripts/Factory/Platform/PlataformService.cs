@@ -15,7 +15,7 @@ public class PlatformService : MonoBehaviour, IPlatformService
 
     public void Initialize(Dictionary<string, GameObject> prefabs, float minScale, float maxScale, float scaleStep, int initialPoolSize)
     {
-        platformFactory = new PlatformFactory(new List<GameObject>(prefabs.Values), minScale, maxScale, scaleStep);
+        platformFactory = new PlatformFactory(new List<GameObject>(prefabs.Values), minScale, maxScale);
         platformPools = new Dictionary<string, ObjectPool>();
         platformTypes = new List<string>(prefabs.Keys);
 

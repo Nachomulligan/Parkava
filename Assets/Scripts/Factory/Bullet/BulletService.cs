@@ -14,7 +14,7 @@ public class BulletService : MonoBehaviour, IBulletService
 
     public void Initialize(GameObject bulletPrefab, float minScale, float maxScale, float scaleStep, int initialPoolSize)
     {
-        bulletFactory = new BulletFactory(bulletPrefab, minScale, maxScale, scaleStep);
+        bulletFactory = new BulletFactory(bulletPrefab, minScale, maxScale);
         bulletPool = new ObjectPool(bulletPrefab, initialPoolSize, transform);
         Debug.Log($"BulletService initialized with: MinScale={minScale}, MaxScale={maxScale}, ScaleStep={scaleStep}");
     }

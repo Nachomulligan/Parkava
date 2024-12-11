@@ -3,17 +3,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlatformFactory : AbstractFactory<GameObject>
+public class PlatformFactory : AbstractFactory<GameObject>, IScalableFactory<GameObject>
 {
     private List<GameObject> prefabs;
-    private float currentScale;
+    private float minScale;
+    private float maxScale;
     private int currentPrefabIndex;
 
-    public PlatformFactory(List<GameObject> prefabs, float minScale, float maxScale, float scaleStep)
-        : base(minScale, maxScale, scaleStep)
+    public PlatformFactory(List<GameObject> prefabs, float minScale, float maxScale)
     {
         this.prefabs = prefabs;
-        currentScale = minScale;
+        this.minScale = minScale;
+        this.maxScale = maxScale;
         currentPrefabIndex = 0;
     }
 
@@ -33,7 +34,7 @@ public class PlatformFactory : AbstractFactory<GameObject>
         return platform;
     }
 
-    public override void UpdateScale(GameObject platform)
+    public void UpdateScale(GameObject platform)
     {
         Vector3 originalScale = platform.transform.localScale;
         float randomScale = Random.Range(minScale, maxScale);
