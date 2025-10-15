@@ -4135,8 +4135,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 42, y: 1.94, z: 8.5}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Size: {x: 48.091713, y: 28.777626, z: 8.5}
+  m_Center: {x: 0.059757233, y: 13.418812, z: 0}
 --- !u!114 &538336907
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4149,6 +4149,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 27f592d920164644d86f20f3c4c74279, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  spawnOffset: {x: 0, y: 0, z: 0}
+  drawGizmo: 1
+  gizmoColor: {r: 0, g: 1, b: 0, a: 1}
 --- !u!1 &541849918
 GameObject:
   m_ObjectHideFlags: 0
@@ -8183,8 +8186,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 42, y: 1.94, z: 8.1}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Size: {x: 48.77288, y: 22.888054, z: 8.1}
+  m_Center: {x: -0.67438126, y: 10.474026, z: 0}
 --- !u!114 &1048187412
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8197,6 +8200,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 27f592d920164644d86f20f3c4c74279, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  spawnOffset: {x: 0, y: 0, z: 0}
+  drawGizmo: 1
+  gizmoColor: {r: 0, g: 1, b: 0, a: 1}
 --- !u!4 &1056244480 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2828746046741760769, guid: 2f0d9a894a8954b4aa1309b8c6bb5f0a,
@@ -9778,8 +9784,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 42, y: 1.94, z: 8.1}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Size: {x: 53.45595, y: 22.52644, z: 8.1}
+  m_Center: {x: -2.8308964, y: 10.293219, z: 0}
 --- !u!114 &1341675929
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9792,6 +9798,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 27f592d920164644d86f20f3c4c74279, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  spawnOffset: {x: 0, y: 0, z: 0}
+  drawGizmo: 1
+  gizmoColor: {r: 0, g: 1, b: 0, a: 1}
 --- !u!1001 &1347087908
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -12379,6 +12388,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8cbedd24b26a68142bb8e2e88b293e05, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  globalSpawnOffset: {x: 0, y: 0, z: 0}
 --- !u!4 &1570841347
 Transform:
   m_ObjectHideFlags: 0
@@ -16594,7 +16604,7 @@ Transform:
   m_GameObject: {fileID: 2124276200}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -4, y: 4.5, z: 36}
+  m_LocalPosition: {x: -4, y: 0, z: 36}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -16633,6 +16643,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 27f592d920164644d86f20f3c4c74279, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  spawnOffset: {x: 0, y: -15.2, z: 0}
+  drawGizmo: 1
+  gizmoColor: {r: 0, g: 1, b: 0, a: 1}
 --- !u!1001 &2133099917
 PrefabInstance:
   m_ObjectHideFlags: 0

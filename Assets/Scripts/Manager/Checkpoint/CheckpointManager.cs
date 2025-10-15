@@ -4,29 +4,36 @@ using UnityEngine;
 
 public class CheckpointManager : MonoBehaviour
 {
-    private Transform lastCheckpoint;
+    private Checkpoint lastCheckpoint;
+
+    [Header("Respawn Settings")]
+    [Tooltip("Additional safety offset applied to all respawns")]
+    [SerializeField] private Vector3 globalSpawnOffset = Vector3.zero;
 
     private void Awake()
     {
         ServiceLocator.Instance.SetService(nameof(CheckpointManager), this);
     }
-    public void SetCheckpoint(Transform checkpoint)
+
+    public void SetCheckpoint(Checkpoint checkpoint)
     {
         lastCheckpoint = checkpoint;
-        Debug.Log("Checkpoint updated: " + checkpoint.position);
+        Debug.Log($"Checkpoint updated: {checkpoint.transform.position}");
     }
 
     public void Respawn(GameObject player)
     {
         if (lastCheckpoint != null)
         {
-            player.transform.position = lastCheckpoint.position;
+            Vector3 respawnPosition = lastCheckpoint.SpawnPosition + globalSpawnOffset;
+            player.transform.position = respawnPosition;
             player.SetActive(true);
+
             var character = ServiceLocator.Instance.GetService(nameof(Character)) as Character;
             if (character != null && character.health != null)
             {
                 character.health.Heal(character.health.GetMaxHealth());
-                Debug.Log("Player respawned at: " + lastCheckpoint.position);
+                Debug.Log($"Player respawned at: {respawnPosition}");
             }
             else
             {
@@ -37,5 +44,10 @@ public class CheckpointManager : MonoBehaviour
         {
             Debug.LogWarning("No checkpoint set. Cannot respawn.");
         }
+    }
+
+    public Vector3? GetLastCheckpointPosition()
+    {
+        return lastCheckpoint != null ? lastCheckpoint.SpawnPosition : null;
     }
 }
