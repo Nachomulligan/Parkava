@@ -7,10 +7,12 @@ public class HUDManager : MonoBehaviour
 {
     [Header("HUD Elements")]
     [SerializeField] private TMP_Text livesText; 
-    [SerializeField] private TMP_Text jumpsText; 
+    [SerializeField] private TMP_Text jumpsText;
+    [SerializeField] private TMP_Text runTimerText;
 
     private LifeService lifeService;
     private PlayerMovement playerMovement;
+    private TimerService timerService;
 
     private void Start()
     {
@@ -27,6 +29,12 @@ public class HUDManager : MonoBehaviour
             return;
         }
 
+        timerService = ServiceLocator.Instance.GetService(nameof(TimerService)) as TimerService;
+        if (timerService == null)
+        {
+            Debug.LogError("TimerService no encontrado en el ServiceLocator.");
+        }
+
         lifeService.OnLifeLost += UpdateLivesUI;
 
         UpdateLivesUI();
@@ -36,6 +44,7 @@ public class HUDManager : MonoBehaviour
     private void Update()
     {
         UpdateJumpsUI();
+        UpdateRunTimerUI();
     }
 
     private void UpdateLivesUI()
@@ -48,6 +57,14 @@ public class HUDManager : MonoBehaviour
         if (playerMovement != null)
         {
             jumpsText.text = $"Jumps: {playerMovement.currentJumpCount}";
+        }
+    }
+
+    private void UpdateRunTimerUI()
+    {
+        if (timerService != null && runTimerText != null)
+        {
+            runTimerText.text = $"Time: {timerService.GetFormattedRunTime()}";
         }
     }
 

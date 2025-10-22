@@ -18,6 +18,15 @@ public class GameplayState : IState
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
         Debug.Log("Entered Gameplay State");
+        var timerService = ServiceLocator.Instance.GetService(nameof(TimerService)) as TimerService;
+        if (timerService != null)
+        {
+            timerService.StartRun();
+        }
+        else
+        {
+            Debug.LogWarning("TimerService not found in ServiceLocator.");
+        }
     }
 
     public void Execute()
@@ -27,5 +36,10 @@ public class GameplayState : IState
     public void Exit()
     {
         Debug.Log("Exiting Gameplay State");
+        var timerService = ServiceLocator.Instance.GetService(nameof(TimerService)) as TimerService;
+        if (timerService != null)
+        {
+            timerService.PauseRun();
+        }
     }
 }
