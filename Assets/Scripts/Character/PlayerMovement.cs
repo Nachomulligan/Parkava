@@ -16,14 +16,14 @@ public class PlayerMovement : MonoBehaviour
     private float desiredX;
 
     [Header("Movement Settings")]
-    public float moveSpeed = 4500;
-    public float maxSpeed = 20;
+    [SerializeField] public float moveSpeed = 4500;
+    [SerializeField] public float maxSpeed = 20;
     public bool grounded;
     public LayerMask whatIsGround;
 
     [Header("MoveSettings")]
     public float counterMovement = 0.175f;
-    private float threshold = 0.01f;
+    [SerializeField] private float threshold = 0.1f;
     public float maxSlopeAngle = 35f;
 
     [Header("Movement Multipliers")]
@@ -43,8 +43,13 @@ public class PlayerMovement : MonoBehaviour
     // Coyote time
     [SerializeField] public float coyoteTime = 0.2f;
     private float coyoteTimeCounter;
+    [SerializeField] public float fallMultiplier = 1f;
     [SerializeField] private int maxJumpCount = 2;
     public int currentJumpCount = 0;
+
+    [Header("Counter Movement Settings")]
+    [SerializeField] public float airCounterMovement = 0.3f; // ⭐ NUEVO: Control de frenado en el aire
+    [SerializeField] public bool enableAirCounterMovement = true; // ⭐
 
     // Input
     float x, y;
@@ -164,6 +169,11 @@ public class PlayerMovement : MonoBehaviour
 
         // Movement while sliding
         if (grounded && crouching) multiplierV = slideMultiplier;
+
+        if (rb.velocity.y < 0) // Cuando el jugador está cayendo
+        {
+            rb.velocity += Vector3.up * Physics.gravity.y * (fallMultiplier - 1) * Time.deltaTime;
+        }
 
         // Apply forces to move player
         rb.AddForce(orientation.transform.forward * y * moveSpeed * Time.deltaTime * multiplier * multiplierV);
@@ -286,23 +296,51 @@ public class PlayerMovement : MonoBehaviour
     /// </summary>
     private void CounterMovement(float x, float y, Vector2 mag)
     {
-        if (!grounded || jumping) return;
+        if (jumping) return;
+
+        // Si está en el aire y el counter movement aéreo está desactivado, salir
+        if (!grounded && !enableAirCounterMovement) return;
 
         // Slow down sliding
-        if (crouching)
+        if (crouching && grounded)
         {
             rb.AddForce(moveSpeed * Time.deltaTime * -rb.velocity.normalized * slideCounterMovement);
             return;
         }
 
-        // Counter movement
+        // ⭐ Usar diferentes valores según si está en el suelo o en el aire
+        float currentCounterMovement = grounded ? counterMovement : airCounterMovement;
+
+        // ⭐ NUEVO: Solo aplicar counter movement si NO estás presionando en la misma dirección del movimiento
+        // Counter movement en X (lateral)
         if (Mathf.Abs(mag.x) > threshold && Mathf.Abs(x) < 0.05f || (mag.x < -threshold && x > 0) || (mag.x > threshold && x < 0))
         {
-            rb.AddForce(moveSpeed * orientation.transform.right * Time.deltaTime * -mag.x * counterMovement);
+            rb.AddForce(moveSpeed * orientation.transform.right * Time.deltaTime * -mag.x * currentCounterMovement);
         }
-        if (Mathf.Abs(mag.y) > threshold && Mathf.Abs(y) < 0.05f || (mag.y < -threshold && y > 0) || (mag.y > threshold && y < 0))
+
+        // Counter movement en Y (adelante/atrás)
+        // ⭐ Solo aplicar si NO estás presionando en la dirección del momentum
+        bool applyYCounter = false;
+
+        // Si no hay input vertical, aplicar counter movement
+        if (Mathf.Abs(mag.y) > threshold && Mathf.Abs(y) < 0.05f)
         {
-            rb.AddForce(moveSpeed * orientation.transform.forward * Time.deltaTime * -mag.y * counterMovement);
+            applyYCounter = true;
+        }
+        // Si te mueves hacia adelante pero presionas hacia atrás
+        else if (mag.y > threshold && y < 0)
+        {
+            applyYCounter = true;
+        }
+        // Si te mueves hacia atrás pero presionas hacia adelante
+        else if (mag.y < -threshold && y > 0)
+        {
+            applyYCounter = true;
+        }
+
+        if (applyYCounter)
+        {
+            rb.AddForce(moveSpeed * orientation.transform.forward * Time.deltaTime * -mag.y * currentCounterMovement);
         }
 
         // Limit diagonal running
@@ -312,8 +350,7 @@ public class PlayerMovement : MonoBehaviour
             Vector3 n = rb.velocity.normalized * maxSpeed;
             rb.velocity = new Vector3(n.x, fallspeed, n.z);
         }
-    }
-
+    } 
     /// <summary>
     /// Find the velocity relative to where the player is looking
     /// Useful for vectors calculations regarding movement and limiting movement

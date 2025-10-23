@@ -2944,7 +2944,7 @@ PrefabInstance:
     - target: {fileID: 4681568733259208991, guid: 84b1fb5547f53914e98087fba5e3630c,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: -12.4
       objectReference: {fileID: 0}
     - target: {fileID: 4681568733259208991, guid: 84b1fb5547f53914e98087fba5e3630c,
         type: 3}
@@ -12528,7 +12528,7 @@ PrefabInstance:
     - target: {fileID: 4681568733259208991, guid: b470088b1a812f141a0d3955d7d7aa22,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 10.400001
+      value: 10.36
       objectReference: {fileID: 0}
     - target: {fileID: 4681568733259208991, guid: b470088b1a812f141a0d3955d7d7aa22,
         type: 3}
@@ -13114,12 +13114,12 @@ PrefabInstance:
     - target: {fileID: 4681568733259208991, guid: 84b1fb5547f53914e98087fba5e3630c,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 5.920001
+      value: 1.08
       objectReference: {fileID: 0}
     - target: {fileID: 4681568733259208991, guid: 84b1fb5547f53914e98087fba5e3630c,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 30.58
+      value: 27.5
       objectReference: {fileID: 0}
     - target: {fileID: 4681568733259208991, guid: 84b1fb5547f53914e98087fba5e3630c,
         type: 3}
@@ -15416,7 +15416,7 @@ PrefabInstance:
     - target: {fileID: 4681568733259208991, guid: 84b1fb5547f53914e98087fba5e3630c,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 41.78
+      value: 37.27
       objectReference: {fileID: 0}
     - target: {fileID: 4681568733259208991, guid: 84b1fb5547f53914e98087fba5e3630c,
         type: 3}
@@ -16659,12 +16659,13 @@ MonoBehaviour:
   playerCam: {fileID: 330585546}
   orientation: {fileID: 1106442025}
   moveSpeed: 4500
-  maxSpeed: 20
+  maxSpeed: 25
   grounded: 0
   whatIsGround:
     serializedVersion: 2
     m_Bits: 128
-  counterMovement: 0.175
+  counterMovement: 0.5
+  threshold: 1
   maxSlopeAngle: 35
   airMultiplier: 0.5
   slideMultiplier: 0
@@ -16673,8 +16674,11 @@ MonoBehaviour:
   jumpCooldown: 0.25
   jumpForce: 550
   coyoteTime: 0
+  fallMultiplier: 2
   maxJumpCount: 2
   currentJumpCount: 0
+  airCounterMovement: 0.14
+  enableAirCounterMovement: 1
 --- !u!114 &2116220076
 MonoBehaviour:
   m_ObjectHideFlags: 0
