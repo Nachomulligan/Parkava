@@ -221,25 +221,23 @@ public class PlayerMovement : MonoBehaviour
         if (grounded && readyToJump)
         {
             readyToJump = false;
-            currentJumpCount ++;
-            
+            currentJumpCount++;
+
             var audioService = ServiceLocator.Instance.GetService(nameof(AudioService)) as AudioService;
             if (audioService != null)
             {
                 audioService.PlaySFX("Jump");
-
             }
 
-            rb.AddForce(Vector2.up * jumpForce * 1.5f);
-            rb.AddForce(normalVector * jumpForce * 0.5f);
-
-            // Reset Y vel if we are falling
+            // Reset Y velocity antes de aplicar fuerza
             Vector3 vel = rb.velocity;
             if (rb.velocity.y < 0.5f)
                 rb.velocity = new Vector3(vel.x, 0, vel.z);
             else if (rb.velocity.y > 0)
                 rb.velocity = new Vector3(vel.x, vel.y / 2, vel.z);
 
+            rb.AddForce(Vector2.up * jumpForce * 1.5f);
+            rb.AddForce(normalVector * jumpForce * 0.5f);
 
             Invoke(nameof(ResetJump), jumpCooldown);
         }
@@ -249,20 +247,25 @@ public class PlayerMovement : MonoBehaviour
             if (audioService != null)
             {
                 audioService.PlaySFX("Jump");
-
             }
+
             currentJumpCount++;
-            rb.AddForce(Vector2.up * jumpForce * 1.2f);
+            Vector3 vel = rb.velocity;
+            rb.velocity = new Vector3(vel.x, 0, vel.z);
+
+            // Aplicar la fuerza del salto
+            rb.AddForce(Vector2.up * jumpForce * 1.5f);
         }
     }
 
     private void ResetJump()
     {
         readyToJump = true;
-        if (grounded)
-        {
-            currentJumpCount = 0;
-        }
+        // Nota: No reiniciamos "currentJumpCount" aquí. Antes se reiniciaba si "grounded" era true,
+        // lo cual podía provocar que si la plataforma se desactivaba o había problemas de colisión
+        // durante el salto, el contador se reiniciara y permitiera saltos infinitos.
+        // El contador ahora se reinicia únicamente al detectar un contacto válido con el suelo
+        // en OnCollisionEnter.
     }
 
     public void SetMaxJumpCount(int value)
