@@ -4,7 +4,7 @@ using UnityEngine;
 
 public interface IPlatformService
 {
-    GameObject GetPlatform(Vector3 position);
+    GameObject GetPlatform(Vector3 position, string type = null);
     void Initialize(Dictionary<string, GameObject> prefabs, float minScale, float maxScale, float scaleStep, int initialPoolSize);
     void ReturnPlatform(GameObject platform);
 }

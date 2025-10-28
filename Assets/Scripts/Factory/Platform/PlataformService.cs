@@ -27,25 +27,31 @@ public class PlatformService : MonoBehaviour, IPlatformService
         Debug.Log($"PlatformService initialized with {platformPools.Count} platform types.");
     }
 
-    public GameObject GetPlatform(Vector3 position)
+    public GameObject GetPlatform(Vector3 position, string type = null)
     {
-        string currentPlatformType = platformTypes[currentPlatformIndex];
-        currentPlatformIndex = (currentPlatformIndex + 1) % platformTypes.Count;
+        string selectedType = type;
 
-        if (platformPools.ContainsKey(currentPlatformType))
+        // If no type requested, use round-robin
+        if (string.IsNullOrEmpty(selectedType))
         {
-            GameObject platform = platformPools[currentPlatformType].GetObject(position);
+            selectedType = platformTypes[currentPlatformIndex];
+            currentPlatformIndex = (currentPlatformIndex + 1) % platformTypes.Count;
+        }
+
+        if (platformPools.ContainsKey(selectedType))
+        {
+            GameObject platform = platformPools[selectedType].GetObject(position);
 
             if (platform == null)
             {
                 platform = platformFactory.Create(position);
             }
-           
-           platformFactory.UpdateScale(platform);
+
+            platformFactory.UpdateScale(platform);
             return platform;
         }
 
-        Debug.LogError($"Platform type {currentPlatformType} not found in pool.");
+        Debug.LogError($"Platform type {selectedType} not found in pool.");
         return null;
     }
 

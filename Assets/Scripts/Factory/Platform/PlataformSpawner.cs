@@ -6,7 +6,6 @@ public class PlatformSpawner : MonoBehaviour
 {
     public GameObject linePlatformPrefab;
     public GameObject destructiblePlatformPrefab;
-    public Vector3 spawnPosition;
     public float spawnInterval = 2f;
     public float speed = 2f;
     public float platformLifetime = 5f;
@@ -24,6 +23,10 @@ public class PlatformSpawner : MonoBehaviour
     [Header("Pooling Settings")]
     public int initialPoolSize = 10;
 
+    [Header("Spawn Options")]
+    public bool spawnLinePlatform = true;
+    public bool spawnDestructiblePlatform = true;
+
     private void Start()
     {
         platformService = ServiceLocator.Instance.GetService(nameof(IPlatformService)) as IPlatformService;
@@ -35,10 +38,10 @@ public class PlatformSpawner : MonoBehaviour
         }
 
         var prefabs = new Dictionary<string, GameObject>
-    {
-        { "LinePlatform", linePlatformPrefab },
-        { "DestructibleMovingPlatform", destructiblePlatformPrefab }
-    };
+        {
+            { "LinePlatform", linePlatformPrefab },
+            { "DestructibleMovingPlatform", destructiblePlatformPrefab }
+        };
 
         platformService.Initialize(prefabs, minScale, maxScale, scaleStep, initialPoolSize);
 
@@ -47,7 +50,25 @@ public class PlatformSpawner : MonoBehaviour
 
     private void SpawnPlatform()
     {
-        GameObject platformObject = platformService.GetPlatform(spawnPosition);
+        Vector3 spawnPoint = transform.position;
+
+        // Decide which type to spawn based on inspector toggles
+        string requestedType = null;
+        if (spawnLinePlatform && !spawnDestructiblePlatform)
+        {
+            requestedType = "LinePlatform";
+        }
+        else if (!spawnLinePlatform && spawnDestructiblePlatform)
+        {
+            requestedType = "DestructibleMovingPlatform";
+        }
+        else
+        {
+            // both true or both false => fallback to default round-robin
+            requestedType = null;
+        }
+
+        GameObject platformObject = platformService.GetPlatform(spawnPoint, requestedType);
 
         if (platformObject != null)
         {
