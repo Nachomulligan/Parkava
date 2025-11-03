@@ -1,0 +1,80 @@
+newmtl ROAD
+Ka 0 0 0
+Kd 0.7843137 0.7843137 0.7843137
+d 1
+Tr 1
+map_Ka ROAD.png
+map_Kd ROAD.png
+map_d ROAD.png
+newmtl grass
+Ka 0 0 0
+Kd 0.972549 0.972549 0.972549
+d 1
+Tr 1
+map_Ka grass.png
+map_Kd grass.png
+map_d grass.png
+newmtl kan1
+Ka 0 0 0
+Kd 0.7843137 0.7843137 0.7843137
+d 1
+Tr 1
+map_Ka kan1.png
+map_Kd kan1.png
+map_d kan1.png
+newmtl mount
+Ka 0 0 0
+Kd 0.7843137 0.7843137 0.7843137
+d 1
+Tr 1
+map_Ka mount.png
+map_Kd mount.png
+map_d mount.png
+newmtl nr_128_256
+Ka 0 0 0
+Kd 0.7843137 0.7843137 0.7843137
+d 1
+Tr 1
+map_Ka nr_128_256.png
+map_Kd nr_128_256.png
+map_d nr_128_256.png
+newmtl nr_128_256c
+Ka 0 0 0
+Kd 0.7843137 0.7843137 0.7843137
+d 1
+Tr 1
+map_Ka nr_128_256c.png
+map_Kd nr_128_256c.png
+map_d nr_128_256c.png
+newmtl nr_32_256
+Ka 0 0 0
+Kd 0.7843137 0.7843137 0.7843137
+d 1
+Tr 1
+map_Ka nr_32_256.png
+map_Kd nr_32_256.png
+map_d nr_32_256.png
+newmtl nr_64_512
+Ka 0 0 0
+Kd 0.7843137 0.7843137 0.7843137
+d 1
+Tr 1
+map_Ka nr_64_512.png
+map_Kd nr_64_512.png
+map_d nr_64_512.png
+newmtl road
+Ka 0 0 0
+Kd 0.7843137 0.7843137 0.7843137
+d 1
+Tr 1
+map_Ka road.png
+map_Kd road.png
+map_d road.png
+newmtl woods
+Ka 0 0 0
+Kd 0.7843137 0.7843137 0.7843137
+d 1
+Tr 1
+map_Ka woods.png
+map_Kd woods.png
+map_d woods.png

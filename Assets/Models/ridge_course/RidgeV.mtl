@@ -1,0 +1,16 @@
+newmtl back
+Ka 0 0 0
+Kd 0.7843137 0.7843137 0.7843137
+d 1
+Tr 1
+map_Ka back.png
+map_Kd back.png
+map_d back.png
+newmtl sky_tx1
+Ka 0 0 0
+Kd 0.972549 0.972549 0.972549
+d 1
+Tr 1
+map_Ka sky_tx1.png
+map_Kd sky_tx1.png
+map_d sky_tx1.png
