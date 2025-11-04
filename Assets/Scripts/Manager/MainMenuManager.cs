@@ -112,6 +112,7 @@ public class MainMenuManager : MonoBehaviour
                 if (success)
                 {
                     Debug.Log($"Player ID '{inputValue}' saved successfully!");
+                    
                     LoadGameplayScene();
                 }
                 else

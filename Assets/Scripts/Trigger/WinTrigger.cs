@@ -9,6 +9,14 @@ public class WinTrigger : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
+            // METRICS: Enviar evento de zona completada ANTES de cambiar de estado
+            var metricsManager = MetricsManager.Instance;
+            if (metricsManager != null)
+            {
+                metricsManager.OnZoneCompleted();
+                Debug.Log("[WinTrigger] Level completed! Metrics sent.");
+            }
+
             var gameManager = GameManager.Instance;
             if (gameManager != null)
             {

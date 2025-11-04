@@ -13,21 +13,28 @@ public class Character : MonoBehaviour
     [Header("Health Settings")]
     public IHealth health;
     [SerializeField] private int initialHealth = 1;
-    
+
+    // Metrics tracking
+    private MetricsManager _metricsManager;
+    private string _lastDeathCause = "unknown";
 
     private void Awake()
     {
         ServiceLocator.Instance.SetService(nameof(Character), this);
     }
+
     void Start()
     {
         health = new Health(initialHealth);
         health.OnDeath += Die;
+        
         var platformService = ServiceLocator.Instance.GetService(nameof(DestructiblePlatformService)) as DestructiblePlatformService;
         if (platformService != null)
         {
             health.OnDeath += platformService.ReactivateAllPlatforms;
         }
+
+        _metricsManager = MetricsManager.Instance;
     }
 
     void Update()
@@ -83,9 +90,24 @@ public class Character : MonoBehaviour
         Debug.Log($"Shield set to {shieldAmount}");
     }
 
+    /// <summary>
+    /// Registrar la causa de muerte antes de morir
+    /// </summary>
+    public void SetDeathCause(string cause)
+    {
+        _lastDeathCause = cause;
+    }
+
     private void Die()
     {
         Debug.Log("Character has died.");
+
+        // METRICS: Enviar evento de muerte
+        if (_metricsManager != null)
+        {
+            _metricsManager.OnPlayerDied(_lastDeathCause, transform.position);
+        }
+
         gameObject.SetActive(false);
 
         var lifeService = ServiceLocator.Instance.GetService(nameof(LifeService)) as LifeService;
@@ -102,6 +124,7 @@ public class Character : MonoBehaviour
                     Debug.Log("Reactivating platforms...");
                     platformService.ReactivateAllPlatforms();
                 }
+                
                 var checkpointManager = ServiceLocator.Instance.GetService(nameof(CheckpointManager)) as CheckpointManager;
                 if (checkpointManager != null)
                 {
@@ -122,6 +145,9 @@ public class Character : MonoBehaviour
         {
             Debug.LogError("LifeService not found in the scene.");
         }
+
+        // Resetear causa de muerte
+        _lastDeathCause = "unknown";
     }
 
     private void HandlePermadeath()

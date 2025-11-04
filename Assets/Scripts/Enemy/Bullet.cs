@@ -9,6 +9,7 @@ public class Bullet : MonoBehaviour
     private float lifetime = 10f;
     private float lifeTimer;
     private int damage = 1;
+
     public void SetMovementStrategy(BulletMovementStrategy strategy)
     {
         movementStrategy = strategy;
@@ -46,10 +47,12 @@ public class Bullet : MonoBehaviour
             var character = ServiceLocator.Instance.GetService(nameof(Character)) as Character;
             if (character != null && other.gameObject == character.gameObject)
             {
+                // METRICS: Establecer causa de muerte antes de hacer daño
+                character.SetDeathCause("enemy_shot");
+                
                 character.health.TakeDamage(damage);
                 gameObject.SetActive(false);
             }
         }
     }
-
 }
