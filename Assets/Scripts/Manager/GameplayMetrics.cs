@@ -1,3 +1,4 @@
+using Unity.Services.Analytics;
 using UnityEngine;
 
 
@@ -8,20 +9,22 @@ public class GameplayMetrics : MonoBehaviour
 
     private void Start()
     {
-        // Obtener el PlayerDataManager persistente
         _playerDataManager = PlayerDataManager.Instance;
 
         if (_playerDataManager != null && _playerDataManager.IsPlayerIdSet())
         {
             _currentPlayerId = _playerDataManager.GetPlayerId();
             Debug.Log($"[Gameplay] Player ID loaded: {_currentPlayerId}");
-            
+
+            var runEvent = new RunStartedEvent();
+            runEvent.PlayerId = _currentPlayerId;
+            runEvent.CurrentAttemptNumber = _playerDataManager.RunCount;
+            AnalyticsService.Instance.RecordEvent(runEvent);
             InitializeMetrics(_currentPlayerId);
         }
         else
         {
             Debug.LogError("[Gameplay] Player ID not set! Returning to Main Menu...");
-            // Opcional: regresar al men? principal si no hay Player ID
             ReturnToMainMenu();
         }
     }

@@ -7,6 +7,7 @@ public class PlayerDataManager : MonoBehaviour
     
     private string _playerId = string.Empty;
     private bool _isPlayerIdSet = false;
+    private int _runCount = 0;
 
     public static PlayerDataManager Instance
     {
@@ -25,6 +26,7 @@ public class PlayerDataManager : MonoBehaviour
             return _instance;
         }
     }
+    public int RunCount => _runCount;
 
     public event Action<string> OnPlayerIdSet = delegate { };
     public event Action<bool> OnPlayerIdValidationChanged = delegate { };
@@ -94,5 +96,17 @@ public class PlayerDataManager : MonoBehaviour
         _playerId = string.Empty;
         _isPlayerIdSet = false;
         Debug.Log("Player ID has been reset.");
+    }
+
+    public void IncrementRunCount()
+    {
+        _runCount++;
+        Debug.Log($"Run actual: {_runCount}");
+    }
+
+    public void ResetRunCount()
+    {
+        _runCount = 0;
+        Debug.Log("Run count reseteado.");
     }
 }

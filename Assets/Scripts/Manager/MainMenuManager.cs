@@ -135,6 +135,7 @@ public class MainMenuManager : MonoBehaviour
     {
         if (_sceneController != null)
         {
+            PlayerDataManager.Instance.IncrementRunCount();
             _sceneController.LoadSceneByName(gameplaySceneName);
         }
         else
