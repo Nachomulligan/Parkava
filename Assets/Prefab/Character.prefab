@@ -77,6 +77,7 @@ GameObject:
   - component: {fileID: 1031818558567909018}
   - component: {fileID: 4841229273031352167}
   - component: {fileID: 3971064181319557626}
+  - component: {fileID: 7111111111111111111}
   m_Layer: 0
   m_Name: Character
   m_TagString: Player
@@ -84,6 +85,29 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &7111111111111111111
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6499006508349350451}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f2ddf8e7165499e9a050e29f436c8a1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  footstepEvent:
+    idInternal: 0
+    valueGuidInternal: 
+    WwiseObjectReference: {fileID: 11400000, guid: bc338aad3e78a6d4d9d847c6c8dd9e46, type: 2}
+  minimumPlanarSpeed: 0.5
+  referenceSpeed: 8
+  stepIntervalAtReferenceSpeed: 0.45
+  minimumStepInterval: 0.16
+  maximumStepInterval: 0.65
+  groundedGracePeriod: 0.12
+  waterLayerName: Water
 --- !u!4 &4574169147631303431
 Transform:
   m_ObjectHideFlags: 0
@@ -173,6 +197,10 @@ MonoBehaviour:
   whatIsGround:
     serializedVersion: 2
     m_Bits: 128
+  groundPoint: {fileID: 6505695982480197014}
+  groundProbeStartOffset: 0.03
+  groundProbeDistance: 0.16
+  groundProbeRadius: 0.1
   counterMovement: 0.5
   threshold: 1
   maxSlopeAngle: 35

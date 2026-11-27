@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
@@ -20,6 +19,12 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] public float maxSpeed = 20;
     public bool grounded;
     public LayerMask whatIsGround;
+
+    [Header("Ground Detection")]
+    [SerializeField] private Transform groundPoint;
+    [SerializeField, Min(0f)] private float groundProbeStartOffset = 0.03f;
+    [SerializeField, Min(0.01f)] private float groundProbeDistance = 0.16f;
+    [SerializeField, Min(0.01f)] private float groundProbeRadius = 0.1f;
 
     [Header("MoveSettings")]
     public float counterMovement = 0.175f;
@@ -61,6 +66,13 @@ public class PlayerMovement : MonoBehaviour
 
 
     private Rigidbody rb;
+    private readonly RaycastHit[] groundProbeHits = new RaycastHit[8];
+    private bool ignoreGroundProbeWhileAscending;
+
+    public bool IsGrounded => grounded;
+    public Collider GroundCollider { get; private set; }
+    public Vector3 GroundContactPoint { get; private set; }
+    public float PlanarSpeed => rb == null ? 0f : new Vector3(rb.velocity.x, 0f, rb.velocity.z).magnitude;
 
     void Awake()
     {
@@ -77,6 +89,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void FixedUpdate()
     {
+        UpdateGroundedState();
         Movement();
     }
 
@@ -181,28 +194,73 @@ public class PlayerMovement : MonoBehaviour
     }
 
     /// <summary>
-    /// Detects when the player collides with the ground, reinitializing coyote time and resetting the jump count.
+    /// Uses a short sphere cast below the player's GroundPoint. This is more
+    /// stable than relying on collision enter/exit callbacks over uneven terrain.
     /// </summary>
-    private void OnCollisionEnter(Collision other)
+    private void UpdateGroundedState()
     {
-        // Reinitialize coyote time
-        if (other.gameObject.layer == LayerMask.NameToLayer("Ground"))
+        bool wasGrounded = grounded;
+
+        if (ignoreGroundProbeWhileAscending)
         {
+            if (rb.velocity.y > 0.1f)
+            {
+                grounded = false;
+                GroundCollider = null;
+                return;
+            }
+
+            ignoreGroundProbeWhileAscending = false;
+        }
+
+        grounded = false;
+        GroundCollider = null;
+
+        Vector3 probePosition = groundPoint != null ? groundPoint.position : transform.position;
+        Vector3 castOrigin = probePosition + Vector3.up * groundProbeStartOffset;
+        int hitCount = Physics.SphereCastNonAlloc(
+            castOrigin,
+            groundProbeRadius,
+            Vector3.down,
+            groundProbeHits,
+            groundProbeDistance,
+            ~0,
+            QueryTriggerInteraction.Ignore);
+
+        float nearestDistance = float.MaxValue;
+        for (int i = 0; i < hitCount; i++)
+        {
+            RaycastHit hit = groundProbeHits[i];
+            Collider hitCollider = hit.collider;
+
+            if (hitCollider == null || hitCollider.attachedRigidbody == rb ||
+                hitCollider.transform.IsChildOf(transform) || !IsGroundCollider(hitCollider))
+                continue;
+
+            float minimumGroundDot = Mathf.Cos(maxSlopeAngle * Mathf.Deg2Rad);
+            if (Vector3.Dot(hit.normal, Vector3.up) < minimumGroundDot || hit.distance >= nearestDistance)
+                continue;
+
+            nearestDistance = hit.distance;
+            GroundCollider = hitCollider;
+            GroundContactPoint = hit.point;
             grounded = true;
+        }
+
+        if (grounded && !wasGrounded)
+        {
             coyoteTimeCounter = coyoteTime;
             currentJumpCount = 0;
         }
     }
 
-    /// <summary>
-    /// Detects when the player leaves contact with the ground, marking them as airborne.
-    /// </summary>
-    private void OnCollisionExit(Collision other)
+    private bool IsGroundCollider(Collider collider)
     {
-        if (other.gameObject.layer == LayerMask.NameToLayer("Ground"))
-        {
-            grounded = false;
-        }
+        if (collider == null)
+            return false;
+
+        bool includedInGroundMask = (whatIsGround.value & (1 << collider.gameObject.layer)) != 0;
+        return includedInGroundMask || collider is TerrainCollider;
     }
 
     private void LateUpdate()
@@ -238,6 +296,7 @@ public class PlayerMovement : MonoBehaviour
 
             rb.AddForce(Vector2.up * jumpForce * 1.5f);
             rb.AddForce(normalVector * jumpForce * 0.5f);
+            ignoreGroundProbeWhileAscending = true;
 
             Invoke(nameof(ResetJump), jumpCooldown);
         }
@@ -255,6 +314,7 @@ public class PlayerMovement : MonoBehaviour
 
             // Aplicar la fuerza del salto
             rb.AddForce(Vector2.up * jumpForce * 1.5f);
+            ignoreGroundProbeWhileAscending = true;
         }
     }
 

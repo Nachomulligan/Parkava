@@ -1,76 +1,80 @@
-﻿using UnityEngine;
+using UnityEngine;
 
 [ExecuteAlways]
 public class LightingManager : MonoBehaviour
 {
-    //Scene References
-    [SerializeField] private Light DirectionalLight;
-    [SerializeField] private LightingPreset Preset;
-    //Variables
-    [SerializeField, Range(0, 24)] private float TimeOfDay;
+    [Header("Lighting")]
+    [SerializeField] private Light directionalLight;
+    [SerializeField] private LightingPreset preset;
+    [SerializeField, Range(0f, 24f)] private float timeOfDay;
 
+    [Header("Time")]
+    [SerializeField, Min(0.01f), Tooltip("Real-time seconds for one complete 24-hour cycle.")]
+    private float cycleDurationSeconds = 24f;
+
+    [Header("Wwise")]
+    [SerializeField] private AK.Wwise.RTPC timeRTPC;
 
     private void Update()
     {
-        if (Preset == null)
+        if (preset == null)
             return;
 
         if (Application.isPlaying)
         {
-            //(Replace with a reference to the game time)
-            TimeOfDay += Time.deltaTime;
-            TimeOfDay %= 24; //Modulus to ensure always between 0-24
-            UpdateLighting(TimeOfDay / 24f);
+            AdvanceTimeOfDay();
+            UpdateWwiseTime();
         }
-        else
-        {
-            UpdateLighting(TimeOfDay / 24f);
-        }
+
+        UpdateLighting(timeOfDay / 24f);
     }
 
+    private void AdvanceTimeOfDay()
+    {
+        float safeCycleDuration = Mathf.Max(0.01f, cycleDurationSeconds);
+        timeOfDay = Mathf.Repeat(timeOfDay + (24f / safeCycleDuration) * Time.deltaTime, 24f);
+    }
+
+    private void UpdateWwiseTime()
+    {
+        if (timeRTPC != null)
+            timeRTPC.SetGlobalValue(timeOfDay);
+    }
 
     private void UpdateLighting(float timePercent)
     {
-        //Set ambient and fog
-        RenderSettings.ambientLight = Preset.AmbientColor.Evaluate(timePercent);
-        RenderSettings.fogColor = Preset.FogColor.Evaluate(timePercent);
+        RenderSettings.ambientLight = preset.AmbientColor.Evaluate(timePercent);
+        RenderSettings.fogColor = preset.FogColor.Evaluate(timePercent);
 
-        //If the directional light is set then rotate and set it's color, I actually rarely use the rotation because it casts tall shadows unless you clamp the value
-        if (DirectionalLight != null)
+        if (directionalLight != null)
         {
-            DirectionalLight.color = Preset.DirectionalColor.Evaluate(timePercent);
-
-            DirectionalLight.transform.localRotation = Quaternion.Euler(new Vector3((timePercent * 360f) - 90f, 170f, 0));
+            directionalLight.color = preset.DirectionalColor.Evaluate(timePercent);
+            directionalLight.transform.localRotation = Quaternion.Euler(
+                (timePercent * 360f) - 90f,
+                170f,
+                0f);
         }
-
     }
 
-
-
-    //Try to find a directional light to use if we haven't set one
     private void OnValidate()
     {
-        if (DirectionalLight != null)
+        if (directionalLight != null)
             return;
 
-        //Search for lighting tab sun
         if (RenderSettings.sun != null)
         {
-            DirectionalLight = RenderSettings.sun;
+            directionalLight = RenderSettings.sun;
+            return;
         }
-        //Search scene for light that fits criteria (directional)
-        else
+
+        Light[] lights = FindObjectsOfType<Light>();
+        foreach (Light light in lights)
         {
-            Light[] lights = GameObject.FindObjectsOfType<Light>();
-            foreach (Light light in lights)
+            if (light.type == LightType.Directional)
             {
-                if (light.type == LightType.Directional)
-                {
-                    DirectionalLight = light;
-                    return;
-                }
+                directionalLight = light;
+                break;
             }
         }
     }
-
 }

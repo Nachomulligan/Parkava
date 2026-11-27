@@ -15,7 +15,7 @@ RenderSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 9
   m_Fog: 1
-  m_FogColor: {r: 0.039215688, g: 0.039215688, b: 0.039215688, a: 1}
+  m_FogColor: {r: 0.04611193, g: 0.04611193, b: 0.04611193, a: 1}
   m_FogMode: 3
   m_FogDensity: 0.003
   m_LinearFogStart: 0
@@ -974,7 +974,6 @@ GameObject:
   - component: {fileID: 992904500}
   - component: {fileID: 992904499}
   - component: {fileID: 992904501}
-  - component: {fileID: 992904502}
   - component: {fileID: 992904503}
   m_Layer: 0
   m_Name: Directional Light
@@ -994,7 +993,7 @@ Light:
   serializedVersion: 10
   m_Type: 1
   m_Shape: 0
-  m_Color: {r: 0, g: 0, b: 0, a: 1}
+  m_Color: {r: 0.024414005, g: 0.024414005, b: 0.024414005, a: 1}
   m_Intensity: 1.66
   m_Range: 10
   m_SpotAngle: 30
@@ -1053,7 +1052,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 992904498}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.061628457, y: -0.70441604, z: -0.70441604, w: -0.061628457}
+  m_LocalRotation: {x: -0.059161425, y: 0.73152816, z: 0.67621773, w: 0.064000465}
   m_LocalPosition: {x: 0, y: 3, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -1083,20 +1082,6 @@ MonoBehaviour:
   m_LightCookieSize: {x: 1, y: 1}
   m_LightCookieOffset: {x: 0, y: 0}
   m_SoftShadowQuality: 0
---- !u!114 &992904502
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 992904498}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0f1bfdaab1b92ce499e9b2f8a04d8e69, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  light: {fileID: 992904499}
-  rotationSpeed: 30
 --- !u!114 &992904503
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1109,9 +1094,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ec92f495b84c2474d8114876d88c89bb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  DirectionalLight: {fileID: 992904499}
-  Preset: {fileID: 11400000, guid: 2ac987dfe38c04449b4e2be8de38daeb, type: 2}
-  TimeOfDay: 24
+  directionalLight: {fileID: 992904499}
+  preset: {fileID: 11400000, guid: 2ac987dfe38c04449b4e2be8de38daeb, type: 2}
+  timeOfDay: 0.3
+  cycleDurationSeconds: 48
+  timeRTPC:
+    idInternal: 0
+    valueGuidInternal: 
+    WwiseObjectReference: {fileID: 11400000, guid: 8f97eb7def5b70b40b551c1190479ce1,
+      type: 2}
 --- !u!1001 &1129651093
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1238,10 +1229,40 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4711985740965223744, guid: 849899a4075597949872542b827a44f3,
+        type: 3}
+      propertyPath: grounded
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4711985740965223744, guid: 849899a4075597949872542b827a44f3,
+        type: 3}
+      propertyPath: maxSpeed
+      value: 8
+      objectReference: {fileID: 0}
     - target: {fileID: 6499006508349350451, guid: 849899a4075597949872542b827a44f3,
         type: 3}
       propertyPath: m_Name
       value: Character
+      objectReference: {fileID: 0}
+    - target: {fileID: 6505695982480197014, guid: 849899a4075597949872542b827a44f3,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -1.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7111111111111111111, guid: 849899a4075597949872542b827a44f3,
+        type: 3}
+      propertyPath: minimumPlanarSpeed
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7111111111111111111, guid: 849899a4075597949872542b827a44f3,
+        type: 3}
+      propertyPath: minimumStepInterval
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7111111111111111111, guid: 849899a4075597949872542b827a44f3,
+        type: 3}
+      propertyPath: stepIntervalAtReferenceSpeed
+      value: 0.24
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 6095617452386547821, guid: 849899a4075597949872542b827a44f3, type: 3}
@@ -1671,7 +1692,7 @@ GameObject:
   - component: {fileID: 1564765213}
   - component: {fileID: 1564765212}
   m_Layer: 0
-  m_Name: Cube
+  m_Name: Ambient
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1716,7 +1737,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2847a00a8bdb0bb4fa468e1e0d694eea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  triggerList: d1bbb3b5
+  triggerList: f7e1664c
   useOtherObject: 0
   actionOnEventType: 0
   curveInterpolation: 4
